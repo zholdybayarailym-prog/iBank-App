@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import SignInScreen from './src/components/SignInScreen';
+import SignUpScreen from './src/components/SignUpScreen';
+import ForgotPasswordScreen from './src/components/ForgotPasswordScreen';
 
 export default function App() {
+  const [currentScreen, setCurrentScreen] = useState<'signin' | 'signup' | 'forgot'>('signin');
+
+  if (currentScreen === 'signup') {
+    return <SignUpScreen onSwitchToSignIn={() => setCurrentScreen('signin')} />;
+  }
+
+  if (currentScreen === 'forgot') {
+    return <ForgotPasswordScreen onBackToSignIn={() => setCurrentScreen('signin')} />;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SignInScreen 
+      onSwitchToSignUp={() => setCurrentScreen('signup')} 
+      onSwitchToForgotPassword={() => setCurrentScreen('forgot')}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
