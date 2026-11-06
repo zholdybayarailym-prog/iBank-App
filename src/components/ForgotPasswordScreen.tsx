@@ -15,16 +15,17 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface ForgotPasswordScreenProps {
   onBackToSignIn: () => void;
+  onNavigateToVerify: (phone: string) => void;
 }
 
-export default function ForgotPasswordScreen({ onBackToSignIn }: ForgotPasswordScreenProps) {
+export default function ForgotPasswordScreen({ onBackToSignIn, onNavigateToVerify }: ForgotPasswordScreenProps) {
   const [phoneNumber, setPhoneNumber] = useState('');
 
   const isFilled = phoneNumber.trim().length > 5;
 
   const handleNext = () => {
     if (isFilled) {
-      alert('Растау коды нөмірге жіберілді: ' + phoneNumber);
+      onNavigateToVerify(phoneNumber);
     }
   };
 
