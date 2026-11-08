@@ -8,10 +8,20 @@ import PasswordChangedScreen from './src/components/PasswordChangedScreen';
 import HomeScreen from './src/components/HomeScreen';
 import SearchScreen from './src/components/SearchScreen';
 import BranchScreen from './src/components/BranchScreen';
+import InterestRateScreen from './src/components/InterestRateScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    'signin' | 'signup' | 'forgot' | 'verify' | 'changePassword' | 'passwordChanged' | 'home' | 'search' | 'branch'
+    | 'signin'
+    | 'signup'
+    | 'forgot'
+    | 'verify'
+    | 'changePassword'
+    | 'passwordChanged'
+    | 'home'
+    | 'search'
+    | 'branch'
+    | 'interestRate'
   >('signin');
 
   const [userPhone, setUserPhone] = useState('');
@@ -81,6 +91,7 @@ export default function App() {
         <SearchScreen
           onNavigateToHome={() => setCurrentScreen('home')}
           onNavigateToBranch={() => setCurrentScreen('branch')}
+          onNavigateToInterestRate={() => setCurrentScreen('interestRate')}
         />
       );
 
@@ -88,6 +99,13 @@ export default function App() {
       return (
         <BranchScreen
           onBack={() => setCurrentScreen('search')}
+        />
+      );
+
+    case 'interestRate':
+      return (
+        <InterestRateScreen
+          onNavigateBack={() => setCurrentScreen('search')}
         />
       );
 
