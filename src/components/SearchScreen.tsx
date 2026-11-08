@@ -15,16 +15,17 @@ interface SearchScreenProps {
   onNavigateToHome?: () => void;
   onNavigateToBranch?: () => void;
   onNavigateToInterestRate?: () => void;
+  onNavigateToExchangeRate?: () => void; // <--- Қосылды
 }
 
 export default function SearchScreen({ 
   onNavigateToHome, 
   onNavigateToBranch, 
-  onNavigateToInterestRate 
+  onNavigateToInterestRate,
+  onNavigateToExchangeRate // <--- Қосылды
 }: SearchScreenProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Іздеуге болатын элементтер тізімі
   const searchItems = [
     { title: 'Бөлімше', subtitle: 'Бөлімшені іздеу', icon: 'bank-outline', type: 'material-community', color: '#00B4D8', bg: '#E8F7FF' },
     { title: 'Пайыздық мөлшерлеме', subtitle: 'Мөлшерлемені іздеу', icon: 'trending-up', type: 'ionicons', color: '#FFB703', bg: '#FFF6E8' },
@@ -32,7 +33,6 @@ export default function SearchScreen({
     { title: 'Айырбастау', subtitle: 'Ақша сомасын айырбастау', icon: 'currency-usd', type: 'material-community', color: '#5C3BFF', bg: '#EEECFF' },
   ];
 
-  // Жазылған сөз бойынша сүзгілеу (фільтр) жасау
   const filteredItems = searchItems.filter(item => 
     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     item.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
@@ -42,7 +42,6 @@ export default function SearchScreen({
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Жоғарғы панель (Header) */}
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContent}>
           <TouchableOpacity style={styles.backButton} onPress={onNavigateToHome}>
@@ -51,7 +50,6 @@ export default function SearchScreen({
           <Text style={styles.headerTitle}>Іздеу</Text>
         </View>
 
-        {/* Іздеу енгізу жолағы (Search Input) */}
         <View style={styles.searchBarContainer}>
           <Feather name="search" size={20} color="#A0AEC0" style={styles.searchIcon} />
           <TextInput
@@ -72,7 +70,6 @@ export default function SearchScreen({
         </View>
       </SafeAreaView>
 
-      {/* Негізгі тізім аймағы */}
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
@@ -85,6 +82,8 @@ export default function SearchScreen({
                   onNavigateToBranch();
                 } else if (item.title === 'Пайыздық мөлшерлеме' && onNavigateToInterestRate) {
                   onNavigateToInterestRate();
+                } else if (item.title === 'Валюта бағамы' && onNavigateToExchangeRate) {
+                  onNavigateToExchangeRate(); // <--- Қосылды
                 }
               }}
             >
@@ -112,7 +111,6 @@ export default function SearchScreen({
         )}
       </ScrollView>
 
-      {/* Төменгі навигация панелі (TabBar) */}
       <View style={styles.bottomTabBar}>
         <TouchableOpacity style={styles.tabItem} onPress={onNavigateToHome}>
           <Feather name="home" size={22} color="#A0AEC0" />

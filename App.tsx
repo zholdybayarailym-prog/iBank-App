@@ -9,6 +9,7 @@ import HomeScreen from './src/components/HomeScreen';
 import SearchScreen from './src/components/SearchScreen';
 import BranchScreen from './src/components/BranchScreen';
 import InterestRateScreen from './src/components/InterestRateScreen';
+import ExchangeRateScreen from './src/components/ExchangeRateScreen'; // <--- Қосылды
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
@@ -22,6 +23,7 @@ export default function App() {
     | 'search'
     | 'branch'
     | 'interestRate'
+    | 'exchangeRate' // <--- Қосылды
   >('signin');
 
   const [userPhone, setUserPhone] = useState('');
@@ -92,6 +94,7 @@ export default function App() {
           onNavigateToHome={() => setCurrentScreen('home')}
           onNavigateToBranch={() => setCurrentScreen('branch')}
           onNavigateToInterestRate={() => setCurrentScreen('interestRate')}
+          onNavigateToExchangeRate={() => setCurrentScreen('exchangeRate')} // <--- Қосылды
         />
       );
 
@@ -105,6 +108,13 @@ export default function App() {
     case 'interestRate':
       return (
         <InterestRateScreen
+          onNavigateBack={() => setCurrentScreen('search')}
+        />
+      );
+
+    case 'exchangeRate': // <--- Қосылды
+      return (
+        <ExchangeRateScreen
           onNavigateBack={() => setCurrentScreen('search')}
         />
       );
