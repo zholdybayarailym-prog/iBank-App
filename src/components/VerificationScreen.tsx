@@ -15,16 +15,21 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface VerificationScreenProps {
   onBack: () => void;
+  onNavigateToChangePassword: () => void;
   phoneNumber?: string;
 }
 
-export default function VerificationScreen({ onBack, phoneNumber = '+7 700 000 00 00' }: VerificationScreenProps) {
+export default function VerificationScreen({ 
+  onBack, 
+  onNavigateToChangePassword, 
+  phoneNumber = '+7 700 000 00 00' 
+}: VerificationScreenProps) {
   const [code, setCode] = useState('');
   const isCodeFilled = code.trim().length >= 4;
 
   const handleVerify = () => {
     if (isCodeFilled) {
-      alert('Код расталды!');
+      onNavigateToChangePassword();
     }
   };
 
@@ -42,7 +47,7 @@ export default function VerificationScreen({ onBack, phoneNumber = '+7 700 000 0
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Forgot password</Text>
+          <Text style={styles.headerTitle}>Verification</Text>
         </View>
       </SafeAreaView>
 
@@ -59,7 +64,7 @@ export default function VerificationScreen({ onBack, phoneNumber = '+7 700 000 0
               <View style={styles.inputWrapper}>
                 <TextInput
                   style={styles.input}
-                  placeholder="Code"
+                  placeholder="0000"
                   placeholderTextColor="#A0AEC0"
                   keyboardType="number-pad"
                   value={code}
@@ -78,7 +83,7 @@ export default function VerificationScreen({ onBack, phoneNumber = '+7 700 000 0
             </Text>
 
             <Text style={styles.timerText}>
-              This code will expired 10 minutes after this message. If you don't get a message.
+              This code will expire 10 minutes after this message. If you don't get a message.
             </Text>
 
             <TouchableOpacity 
@@ -88,7 +93,7 @@ export default function VerificationScreen({ onBack, phoneNumber = '+7 700 000 0
               disabled={!isCodeFilled}
             >
               <Text style={[styles.verifyButtonText, isCodeFilled && styles.verifyButtonTextActive]}>
-                Verify password
+                Verify code
               </Text>
             </TouchableOpacity>
           </View>
