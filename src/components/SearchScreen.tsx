@@ -13,14 +13,15 @@ import { Ionicons, MaterialCommunityIcons, FontAwesome5, Feather } from '@expo/v
 
 interface SearchScreenProps {
   onNavigateToHome?: () => void;
+  onNavigateToBranch?: () => void;
 }
 
-export default function SearchScreen({ onNavigateToHome }: SearchScreenProps) {
+export default function SearchScreen({ onNavigateToHome, onNavigateToBranch }: SearchScreenProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Іздеуге болатын элементтер тізімі
   const searchItems = [
-    { title: 'Бөлімше', subtitle: 'Бөлімшені іздеу', icon: 'bank-outline', type: 'material-community', color: '#00B4D8', bg: '#E8F7FF' },
+    { title: 'Бөлімше', subtitle: 'Бөлімшені іздеу', icon: 'bank-outline', type: 'material-community', color: '#00B4D8', bg: '#E8F7FF', onPress: onNavigateToBranch },
     { title: 'Пайыздық мөлшерлеме', subtitle: 'Мөлшерлемені іздеу', icon: 'trending-up', type: 'ionicons', color: '#FFB703', bg: '#FFF6E8' },
     { title: 'Валюта бағамы', subtitle: 'Бағамды іздеу', icon: 'exchange-alt', type: 'font-awesome5', color: '#FF4D6D', bg: '#FFE8EE' },
     { title: 'Айырбастау', subtitle: 'Ақша сомасын айырбастау', icon: 'currency-usd', type: 'material-community', color: '#5C3BFF', bg: '#EEECFF' },
@@ -54,6 +55,9 @@ export default function SearchScreen({ onNavigateToHome }: SearchScreenProps) {
             placeholderTextColor="#A0AEC0"
             value={searchQuery}
             onChangeText={setSearchQuery}
+            autoCapitalize="none"
+            autoCorrect={false}
+            keyboardType="default"
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={() => setSearchQuery('')}>
@@ -67,7 +71,12 @@ export default function SearchScreen({ onNavigateToHome }: SearchScreenProps) {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
-            <TouchableOpacity key={index} style={styles.searchCard} activeOpacity={0.7}>
+            <TouchableOpacity 
+              key={index} 
+              style={styles.searchCard} 
+              activeOpacity={0.7} 
+              onPress={item.onPress}
+            >
               <View style={styles.cardTextContainer}>
                 <Text style={styles.cardTitle}>{item.title}</Text>
                 <Text style={styles.cardSubtitle}>{item.subtitle}</Text>

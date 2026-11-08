@@ -8,18 +8,18 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, FontAwesome5, Feather } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 
 interface HomeScreenProps {
   userName?: string;
   userBalance?: string;
-  onNavigateToSearch?: () => void; // <--- Қосылды
+  onNavigateToSearch?: () => void;
 }
 
 export default function HomeScreen({ 
   userName = 'Арайлым Жолдыбай', 
   userBalance = '$3,469.52',
-  onNavigateToSearch, // <--- Қабылданды
+  onNavigateToSearch,
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -48,19 +48,24 @@ export default function HomeScreen({
       <View style={styles.mainContainer}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
           
-          {/* Банк картасы */}
+         {/* Банк картасы */}
           <View style={styles.cardContainer}>
             <View style={styles.cardDesign}>
               <View style={styles.cardTopRow}>
                 <Text style={styles.cardHolderName}>{userName}</Text>
               </View>
+              
               <View>
                 <Text style={styles.cardType}>Amazon Platinum</Text>
                 <Text style={styles.cardNumber}>4758  ••••  ••••  9018</Text>
               </View>
+
               <View style={styles.cardBottomRow}>
                 <Text style={styles.cardBalance}>{userBalance}</Text>
-                <FontAwesome5 name="visa" size={36} color="#FFFFFF" />
+                {/* Шын мәнінде көрінетін әдемі VISA логотипі */}
+                <View style={styles.visaContainer}>
+                  <Text style={styles.visaText}>VISA</Text>
+                </View>
               </View>
             </View>
           </View>
@@ -231,6 +236,17 @@ const styles = StyleSheet.create({
   cardNumber: { color: '#FFFFFF', fontSize: 15, letterSpacing: 2 },
   cardBottomRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
   cardBalance: { color: '#FFFFFF', fontSize: 22, fontWeight: '700' },
+  visaContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  visaText: {
+    color: '#FFFFFF',
+    fontSize: 22,
+    fontWeight: '900',
+    fontStyle: 'italic',
+    letterSpacing: 3,
+  },
   gridContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
