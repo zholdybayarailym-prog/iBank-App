@@ -16,11 +16,13 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 interface SignInScreenProps {
   onSwitchToSignUp: () => void;
   onSwitchToForgotPassword: () => void;
+  onSignInSuccess: () => void; // Басты бетке өту үшін қосылды
 }
 
 export default function SignInScreen({
   onSwitchToSignUp,
   onSwitchToForgotPassword,
+  onSignInSuccess,
 }: SignInScreenProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -118,7 +120,11 @@ export default function SignInScreen({
               <Text style={styles.forgotPasswordText}>Құпия сөзді ұмытыңыз ба?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.signInButton} activeOpacity={0.8}>
+            <TouchableOpacity 
+              style={styles.signInButton} 
+              activeOpacity={0.8}
+              onPress={onSignInSuccess} // Басқан кезде Басты бетке (HomeScreen) өтеді
+            >
               <Text style={styles.signInButtonText}>Кіру</Text>
             </TouchableOpacity>
 
