@@ -4,9 +4,10 @@ import SignUpScreen from './src/components/SignUpScreen';
 import ForgotPasswordScreen from './src/components/ForgotPasswordScreen';
 import VerificationScreen from './src/components/VerificationScreen';
 import ChangePasswordScreen from './src/components/ChangePasswordScreen';
+import PasswordChangedScreen from './src/components/PasswordChangedScreen'; // Жаңа экранды қостық
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'signin' | 'signup' | 'forgot' | 'verify' | 'changePassword'>('signin');
+  const [currentScreen, setCurrentScreen] = useState<'signin' | 'signup' | 'forgot' | 'verify' | 'changePassword' | 'passwordChanged'>('signin');
   const [userPhone, setUserPhone] = useState('');
 
   if (currentScreen === 'signup') {
@@ -31,7 +32,6 @@ export default function App() {
         phoneNumber={userPhone}
         onBack={() => setCurrentScreen('forgot')} 
         onNavigateToChangePassword={() => {
-          // Егер мұнда alert('Код расталды!') тұрса, оны өшіріп, тек төмендегідей қалдырыңыз:
           setCurrentScreen('changePassword');
         }}
       />
@@ -43,7 +43,18 @@ export default function App() {
       <ChangePasswordScreen 
         onBack={() => setCurrentScreen('verify')}
         onSuccess={() => {
-          alert('Құпия сөз сәтті өзгертілді!');
+          // Alert-тің орнына суреттегі жаңа экранға ауыстырамыз
+          setCurrentScreen('passwordChanged');
+        }}
+      />
+    );
+  }
+
+  if (currentScreen === 'passwordChanged') {
+    return (
+      <PasswordChangedScreen 
+        onSuccess={() => {
+          // Ok басылғанда Sign in бетіне қайтамыз
           setCurrentScreen('signin');
         }}
       />
@@ -56,4 +67,4 @@ export default function App() {
       onSwitchToForgotPassword={() => setCurrentScreen('forgot')}
     />
   );
-}
+} 

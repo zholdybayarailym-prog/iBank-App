@@ -47,7 +47,7 @@ export default function VerificationScreen({
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Verification</Text>
+          <Text style={styles.headerTitle}>Растау</Text>
         </View>
       </SafeAreaView>
 
@@ -58,7 +58,7 @@ export default function VerificationScreen({
       >
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
-            <Text style={styles.label}>Type a code</Text>
+            <Text style={styles.label}>Кодты енгізіңіз</Text>
             
             <View style={styles.inputContainer}>
               <View style={styles.inputWrapper}>
@@ -73,17 +73,17 @@ export default function VerificationScreen({
                 />
               </View>
               <TouchableOpacity style={styles.resendButton} onPress={handleResend} activeOpacity={0.8}>
-                <Text style={styles.resendButtonText}>Resend</Text>
+                <Text style={styles.resendButtonText}>Қайта жіберу</Text>
               </TouchableOpacity>
             </View>
 
             <Text style={styles.infoText}>
-              We texted you a code to verify your phone number{'\n'}
+              Телефон нөміріңізді растау үшін сізге код жібердік{'\n'}
               <Text style={styles.boldPhone}>({phoneNumber})</Text>
             </Text>
 
             <Text style={styles.timerText}>
-              This code will expire 10 minutes after this message. If you don't get a message.
+              Бұл код хабарлама келгеннен кейін 10 минут ішінде жарамсыз болады. Егер хабарлама алмасаңыз.
             </Text>
 
             <TouchableOpacity 
@@ -93,13 +93,13 @@ export default function VerificationScreen({
               disabled={!isCodeFilled}
             >
               <Text style={[styles.verifyButtonText, isCodeFilled && styles.verifyButtonTextActive]}>
-                Verify code
+                Кодты растау
               </Text>
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity onPress={onBack} style={styles.changePhoneContainer}>
-            <Text style={styles.changePhoneText}>Change your phone number</Text>
+            <Text style={styles.changePhoneText}>Телефон нөмірін өзгерту</Text>
           </TouchableOpacity>
         </ScrollView>
       </KeyboardAvoidingView>

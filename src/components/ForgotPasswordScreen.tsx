@@ -39,7 +39,7 @@ export default function ForgotPasswordScreen({ onBackToSignIn, onNavigateToVerif
           <TouchableOpacity style={styles.backButton} onPress={onBackToSignIn}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Forgot password</Text>
+          <Text style={styles.headerTitle}>Құпия сөзді ұмыттыңыз ба?</Text>
         </View>
       </SafeAreaView>
 
@@ -51,7 +51,7 @@ export default function ForgotPasswordScreen({ onBackToSignIn, onNavigateToVerif
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           {/* Ақ карточка */}
           <View style={styles.card}>
-            <Text style={styles.label}>Type your phone number</Text>
+            <Text style={styles.label}>Телефон нөміріңізді енгізіңіз</Text>
             
             <View style={styles.inputWrapper}>
               <TextInput
@@ -65,7 +65,7 @@ export default function ForgotPasswordScreen({ onBackToSignIn, onNavigateToVerif
             </View>
 
             <Text style={styles.infoText}>
-              We texted you a code to verify your phone number
+              Телефон нөміріңізді растау үшін сізге код жібереміз
             </Text>
 
             <TouchableOpacity 
@@ -75,7 +75,7 @@ export default function ForgotPasswordScreen({ onBackToSignIn, onNavigateToVerif
               disabled={!isFilled}
             >
               <Text style={[styles.nextButtonText, isFilled && styles.nextButtonTextActive]}>
-                Next
+                Келесі
               </Text>
             </TouchableOpacity>
           </View>

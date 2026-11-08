@@ -24,13 +24,11 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  // Барлық өрістер толық толтырылғанын және шартқа галочка қойылғанын тексеру
   const isFormValid = name.trim().length > 0 && email.trim().length > 0 && password.trim().length > 0 && isChecked;
 
   const handleSignUp = () => {
     if (isFormValid) {
       alert('Аккаунт сәтті құрылды!');
-      // Қажет болса мұнда Sign In немесе басқа бетке өту логикасын қосуға болады
     }
   };
 
@@ -38,19 +36,17 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* Күлгін жоғарғы панель */}
       <View style={styles.topHeader}>
         <SafeAreaView>
           <View style={styles.headerContent}>
             <TouchableOpacity style={styles.backButton} onPress={onSwitchToSignIn}>
               <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Sign up</Text>
+            <Text style={styles.headerTitle}>Тіркелу</Text>
           </View>
         </SafeAreaView>
       </View>
 
-      {/* Ақ контейнер */}
       <View style={styles.contentContainer}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -60,10 +56,9 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
-            <Text style={styles.title}>Welcome to us,</Text>
-            <Text style={styles.subtitle}>Hello there, create New account</Text>
+            <Text style={styles.title}>Бізге қосылыңыз,</Text>
+            <Text style={styles.subtitle}>Жаңа аккаунт ашыңыз</Text>
 
-            {/* Иллюстрация */}
             <View style={styles.illustrationContainer}>
               <View style={[styles.dot, styles.dotGreen]} />
               <View style={[styles.dot, styles.dotOrange]} />
@@ -78,22 +73,20 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
               </View>
             </View>
 
-            {/* Input - Name */}
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Name"
+                placeholder="Аты-жөні"
                 placeholderTextColor="#A0AEC0"
                 value={name}
                 onChangeText={setName}
               />
             </View>
 
-            {/* Input - Email */}
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Text input (Email)"
+                placeholder="Электронды пошта"
                 placeholderTextColor="#A0AEC0"
                 value={email}
                 onChangeText={setEmail}
@@ -101,11 +94,10 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
               />
             </View>
 
-            {/* Input - Password */}
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder="Құпия сөз"
                 placeholderTextColor="#A0AEC0"
                 secureTextEntry={!showPassword}
                 value={password}
@@ -123,7 +115,6 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
               </TouchableOpacity>
             </View>
 
-            {/* Шарттар */}
             <View style={styles.termsContainer}>
               <TouchableOpacity
                 style={[styles.checkbox, isChecked && styles.checkboxChecked]}
@@ -132,8 +123,8 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
                 {isChecked && <Ionicons name="checkmark" size={14} color="#FFFFFF" />}
               </TouchableOpacity>
               <Text style={styles.termsText}>
-                By creating an account your agree{'\n'}
-                to our <Text style={styles.termsLink}>Term and Conditions</Text>
+                Аккаунт құру арқылы сіз біздің{'\n'}
+                <Text style={styles.termsLink}>Шарттарымыз бен ережелерімізге</Text> келісесіз
               </Text>
             </View>
 
@@ -144,15 +135,14 @@ export default function SignUpScreen({ onSwitchToSignIn }: SignUpScreenProps) {
               disabled={!isFormValid}
             >
               <Text style={[styles.signUpButtonText, isFormValid && styles.signUpButtonTextActive]}>
-                Sign up
+                Тіркелу
               </Text>
             </TouchableOpacity>
 
-            {/* Sign In бетіне қайтару */}
             <View style={styles.footer}>
-              <Text style={styles.footerText}>Have an account? </Text>
+              <Text style={styles.footerText}>Аккаунтыңыз бар ма? </Text>
               <TouchableOpacity onPress={onSwitchToSignIn}>
-                <Text style={styles.signInLink}>Sign In</Text>
+                <Text style={styles.signInLink}>Кіру</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>

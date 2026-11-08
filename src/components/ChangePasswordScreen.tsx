@@ -36,7 +36,7 @@ export default function ChangePasswordScreen({ onBack, onSuccess }: ChangePasswo
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Change password</Text>
+          <Text style={styles.headerTitle}>Құпия сөзді өзгерту</Text>
         </View>
       </SafeAreaView>
 
@@ -48,7 +48,7 @@ export default function ChangePasswordScreen({ onBack, onSuccess }: ChangePasswo
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           <View style={styles.card}>
             {/* Жаңа құпия сөз */}
-            <Text style={styles.label}>Type your new password</Text>
+            <Text style={styles.label}>Жаңа құпия сөзді енгізіңіз</Text>
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
@@ -64,7 +64,7 @@ export default function ChangePasswordScreen({ onBack, onSuccess }: ChangePasswo
             </View>
 
             {/* Құпия сөзді растау */}
-            <Text style={styles.label}>Confirm password</Text>
+            <Text style={styles.label}>Құпия сөзді растаңыз</Text>
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
@@ -86,7 +86,7 @@ export default function ChangePasswordScreen({ onBack, onSuccess }: ChangePasswo
               disabled={!isFilled}
             >
               <Text style={[styles.buttonText, isFilled && styles.buttonTextActive]}>
-                Change password
+                Құпия сөзді өзгерту
               </Text>
             </TouchableOpacity>
           </View>

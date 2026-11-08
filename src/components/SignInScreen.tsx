@@ -37,7 +37,7 @@ export default function SignInScreen({
             <TouchableOpacity style={styles.backButton} onPress={onSwitchToSignUp}>
               <Ionicons name="chevron-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
-            <Text style={styles.headerTitle}>Sign in</Text>
+            <Text style={styles.headerTitle}>Кіру</Text>
           </View>
         </SafeAreaView>
       </View>
@@ -52,8 +52,8 @@ export default function SignInScreen({
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
           >
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Hello there, sign in to continue</Text>
+            <Text style={styles.title}>Қош келдіңіз!</Text>
+            <Text style={styles.subtitle}>Жалғастыру үшін жүйеге кіріңіз</Text>
 
             {/* Иллюстрация */}
             <View style={styles.illustrationContainer}>
@@ -80,7 +80,7 @@ export default function SignInScreen({
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Text input"
+                placeholder="Электронды пошта немесе телефон"
                 placeholderTextColor="#A0AEC0"
                 value={email}
                 onChangeText={setEmail}
@@ -92,7 +92,7 @@ export default function SignInScreen({
             <View style={styles.inputWrapper}>
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder="Құпия сөз"
                 placeholderTextColor="#A0AEC0"
                 secureTextEntry={!showPassword}
                 value={password}
@@ -115,11 +115,11 @@ export default function SignInScreen({
               style={styles.forgotPasswordContainer}
               onPress={onSwitchToForgotPassword}
             >
-              <Text style={styles.forgotPasswordText}>Forgot your password ?</Text>
+              <Text style={styles.forgotPasswordText}>Құпия сөзді ұмытыңыз ба?</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.signInButton} activeOpacity={0.8}>
-              <Text style={styles.signInButtonText}>Sign in</Text>
+              <Text style={styles.signInButtonText}>Кіру</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.fingerprintContainer}>
@@ -128,9 +128,9 @@ export default function SignInScreen({
 
             {/* Sign Up бетіне ауысатын сілтеме */}
             <View style={styles.footer}>
-              <Text style={styles.footerText}>Don't have an account? </Text>
+              <Text style={styles.footerText}>Аккаунтыңыз жоқ па? </Text>
               <TouchableOpacity onPress={onSwitchToSignUp}>
-                <Text style={styles.signUpText}>Sign Up</Text>
+                <Text style={styles.signUpText}>Тіркелу</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
