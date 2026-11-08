@@ -13,11 +13,13 @@ import { Ionicons, MaterialCommunityIcons, FontAwesome5, Feather } from '@expo/v
 interface HomeScreenProps {
   userName?: string;
   userBalance?: string;
+  onNavigateToSearch?: () => void; // <--- Қосылды
 }
 
 export default function HomeScreen({ 
   userName = 'Арайлым Жолдыбай', 
-  userBalance = '$3,469.52' 
+  userBalance = '$3,469.52',
+  onNavigateToSearch, // <--- Қабылданды
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -148,7 +150,8 @@ export default function HomeScreen({
             <Text style={styles.tabTextActive}>Басты бет</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.tabItem}>
+          {/* Іздеу бетіне өтетін түйме */}
+          <TouchableOpacity style={styles.tabItem} onPress={onNavigateToSearch}>
             <Feather name="search" size={22} color="#A0AEC0" />
           </TouchableOpacity>
 

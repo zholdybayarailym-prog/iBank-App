@@ -6,10 +6,11 @@ import VerificationScreen from './src/components/VerificationScreen';
 import ChangePasswordScreen from './src/components/ChangePasswordScreen';
 import PasswordChangedScreen from './src/components/PasswordChangedScreen';
 import HomeScreen from './src/components/HomeScreen';
+import SearchScreen from './src/components/SearchScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<
-    'signin' | 'signup' | 'forgot' | 'verify' | 'changePassword' | 'passwordChanged' | 'home'
+    'signin' | 'signup' | 'forgot' | 'verify' | 'changePassword' | 'passwordChanged' | 'home' | 'search'
   >('signin');
 
   const [userPhone, setUserPhone] = useState('');
@@ -68,7 +69,18 @@ export default function App() {
       );
 
     case 'home':
-      return <HomeScreen />;
+      return (
+        <HomeScreen
+          onNavigateToSearch={() => setCurrentScreen('search')}
+        />
+      );
+
+    case 'search':
+      return (
+        <SearchScreen
+          onNavigateToHome={() => setCurrentScreen('home')}
+        />
+      );
 
     default:
       return (
