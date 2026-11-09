@@ -9,6 +9,8 @@ import {
   ScrollView,
   TextInput,
   Keyboard,
+  Modal,
+  FlatList,
 } from 'react-native';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -16,30 +18,55 @@ interface ExchangeScreenProps {
   onBack?: () => void;
 }
 
+// Барлық валюта түрлері мен олардың бағамдары
+const currencies = [
+  { code: 'USD', name: 'АҚШ доллары', symbol: '$', rate: 1.0 },
+  { code: 'KZT', name: 'Қазақ теңгесі', symbol: '₸', rate: 485.0 },
+  { code: 'EUR', name: 'Еуро', symbol: '€', rate: 0.92 },
+  { code: 'RUB', name: 'Ресей рублі', symbol: '₽', rate: 95.0 },
+  { code: 'GBP', name: 'Британ фунты', symbol: '£', rate: 0.79 },
+  { code: 'CNY', name: 'Қытай юаньі', symbol: '¥', rate: 7.2 },
+];
+
 export default function ExchangeScreen({ onBack }: ExchangeScreenProps) {
   const [fromAmount, setFromAmount] = useState('');
   const [toAmount, setToAmount] = useState('');
-  const [fromCurrency, setFromCurrency] = useState('USD');
-  const [toCurrency, setToCurrency] = useState('EUR');
+  const [fromCurrency, setFromCurrency] = useState(currencies[0]); // USD
+  const [toCurrency, setToCurrency] = useState(currencies[1]);     // KZT
 
-  // Валюта бағамын есептейтін функция
-  const handleExchange = () => {
-    Keyboard.dismiss(); // Пернетақтаны жабу
-    if (!fromAmount) return;
+  const [modalVisible, setModalVisible] = useState(false);
+  const [activeSelection, setActiveSelection] = useState<'from' | 'to'>('from');
 
-    const num = parseFloat(fromAmount);
-    if (isNaN(num)) return;
-
-    // Шартты түрдегі курс коэффициенті
-    let rate = 0.92; // Мысалы, USD -> EUR
-    if (fromCurrency === toCurrency) {
-      rate = 1;
-    } else if (fromCurrency === 'EUR' && toCurrency === 'USD') {
-      rate = 1.09;
+  const calculateExchange = (amount: string, from: typeof currencies[0], to: typeof currencies[0]) => {
+    if (!amount) {
+      setToAmount('');
+      return;
+    }
+    const num = parseFloat(amount);
+    if (isNaN(num)) {
+      setToAmount('');
+      return;
     }
 
-    const result = (num * rate).toFixed(2);
+    const amountInUSD = num / from.rate;
+    const result = (amountInUSD * to.rate).toFixed(2);
     setToAmount(result);
+  };
+
+  const handleTextChange = (text: string) => {
+    setFromAmount(text);
+    calculateExchange(text, fromCurrency, toCurrency);
+  };
+
+  const handleSelectCurrency = (currency: typeof currencies[0]) => {
+    if (activeSelection === 'from') {
+      setFromCurrency(currency);
+      calculateExchange(fromAmount, currency, toCurrency);
+    } else {
+      setToCurrency(currency);
+      calculateExchange(fromAmount, fromCurrency, currency);
+    }
+    setModalVisible(false);
   };
 
   return (
@@ -61,7 +88,6 @@ export default function ExchangeScreen({ onBack }: ExchangeScreenProps) {
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* Жоғарғы иллюстрация бөлігі */}
         <View style={styles.illustrationContainer}>
           <View style={styles.phoneMockup}>
             <MaterialCommunityIcons name="cellphone" size={95} color="#5C3BFF" />
@@ -71,9 +97,8 @@ export default function ExchangeScreen({ onBack }: ExchangeScreenProps) {
           </View>
         </View>
 
-        {/* Негізгі ақ карточка контейнері */}
         <View style={styles.card}>
-          {/* Қайдан (From) */}
+          {/* Қайдан */}
           <Text style={styles.label}>Қайдан</Text>
           <View style={styles.inputRow}>
             <TextInput
@@ -82,26 +107,31 @@ export default function ExchangeScreen({ onBack }: ExchangeScreenProps) {
               placeholderTextColor="#A0AEC0"
               keyboardType="numeric"
               value={fromAmount}
-              onChangeText={setFromAmount}
+              onChangeText={handleTextChange}
             />
-            <TouchableOpacity style={styles.currencySelector}>
-              <Text style={styles.currencyText}>{fromCurrency}</Text>
-              <Ionicons name="swap-vertical" size={16} color="#718096" />
+            <TouchableOpacity 
+              style={styles.currencySelector}
+              onPress={() => {
+                setActiveSelection('from');
+                setModalVisible(true);
+              }}
+            >
+              <Text style={styles.currencyText}>{fromCurrency.code}</Text>
+              <Ionicons name="chevron-down" size={16} color="#718096" />
             </TouchableOpacity>
           </View>
 
-          {/* Ортадағы алмастыру түймесі (Swap) */}
+          {/* Алмастыру батырмасы */}
           <View style={styles.swapContainer}>
             <TouchableOpacity 
               style={styles.swapButton} 
               activeOpacity={0.7}
               onPress={() => {
-                // Валюталардың орнын өзара ауыстыру
-                const temp = fromCurrency;
+                const tempCurr = fromCurrency;
                 setFromCurrency(toCurrency);
-                setToCurrency(temp);
+                setToCurrency(tempCurr);
                 setFromAmount(toAmount);
-                setToAmount(fromAmount);
+                calculateExchange(toAmount, toCurrency, tempCurr);
               }}
             >
               <Ionicons name="arrow-down" size={16} color="#5C3BFF" />
@@ -109,33 +139,82 @@ export default function ExchangeScreen({ onBack }: ExchangeScreenProps) {
             </TouchableOpacity>
           </View>
 
-          {/* Қайда (To) */}
+          {/* Қайда */}
           <Text style={styles.label}>Қайда</Text>
           <View style={styles.inputRow}>
             <TextInput
               style={styles.input}
-              placeholder="Сомасы"
+              placeholder="Нәтиже"
               placeholderTextColor="#A0AEC0"
-              keyboardType="numeric"
+              editable={false}
               value={toAmount}
-              onChangeText={setToAmount}
             />
-            <TouchableOpacity style={styles.currencySelector}>
-              <Text style={styles.currencyText}>{toCurrency}</Text>
-              <Ionicons name="swap-vertical" size={16} color="#718096" />
+            <TouchableOpacity 
+              style={styles.currencySelector}
+              onPress={() => {
+                setActiveSelection('to');
+                setModalVisible(true);
+              }}
+            >
+              <Text style={styles.currencyText}>{toCurrency.code}</Text>
+              <Ionicons name="chevron-down" size={16} color="#718096" />
             </TouchableOpacity>
           </View>
 
-          {/* Айырбастау батырмасы */}
           <TouchableOpacity 
             style={styles.exchangeButton} 
             activeOpacity={0.8}
-            onPress={handleExchange}
+            onPress={() => {
+              Keyboard.dismiss();
+              calculateExchange(fromAmount, fromCurrency, toCurrency);
+            }}
           >
-            <Text style={styles.exchangeButtonText}>Айырбастау</Text>
+            <Text style={styles.exchangeButtonText}>Есептеу</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Валюта таңдау терезесі (Modal) */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Валютаны таңдаңыз</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#1A202C" />
+              </TouchableOpacity>
+            </View>
+
+            <FlatList
+              data={currencies}
+              keyExtractor={(item) => item.code}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.currencyItem}
+                  onPress={() => handleSelectCurrency(item)}
+                >
+                  <View style={styles.currencyItemLeft}>
+                    <Text style={styles.currencySymbol}>{item.symbol}</Text>
+                    <View>
+                      <Text style={styles.currencyCodeText}>{item.code}</Text>
+                      <Text style={styles.currencyNameText}>{item.name}</Text>
+                    </View>
+                  </View>
+                  {((activeSelection === 'from' && fromCurrency.code === item.code) ||
+                    (activeSelection === 'to' && toCurrency.code === item.code)) && (
+                    <Ionicons name="checkmark" size={20} color="#5C3BFF" />
+                  )}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -247,5 +326,55 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: 24,
+    maxHeight: '50%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1A202C',
+  },
+  currencyItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  currencyItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  currencySymbol: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#5C3BFF',
+    width: 36,
+  },
+  currencyCodeText: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#1A202C',
+  },
+  currencyNameText: {
+    fontSize: 12,
+    color: '#718096',
   },
 });
