@@ -14,12 +14,14 @@ interface HomeScreenProps {
   userName?: string;
   userBalance?: string;
   onNavigateToSearch?: () => void;
+  onNavigateToExchange?: () => void; // <--- ЖАҢА: Айырбастау бетіне өту функциясы
 }
 
 export default function HomeScreen({ 
   userName = 'Арайлым Жолдыбай', 
   userBalance = '$3,469.52',
   onNavigateToSearch,
+  onNavigateToExchange,
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -62,7 +64,6 @@ export default function HomeScreen({
 
               <View style={styles.cardBottomRow}>
                 <Text style={styles.cardBalance}>{userBalance}</Text>
-                {/* Шын мәнінде көрінетін әдемі VISA логотипі */}
                 <View style={styles.visaContainer}>
                   <Text style={styles.visaText}>VISA</Text>
                 </View>
@@ -81,8 +82,12 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Шот пен карта</Text>
             </TouchableOpacity>
 
-            {/* 2. Ақша аудару */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            {/* 2. Ақша аудару -> Бұл батырманы басқанда ExchangeScreen ашылады */}
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7} 
+              onPress={onNavigateToExchange}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#FFE8EE' }]}>
                 <MaterialCommunityIcons name="swap-horizontal" size={24} color="#FF4D6D" />
               </View>

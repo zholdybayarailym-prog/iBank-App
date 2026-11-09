@@ -17,6 +17,7 @@ interface SearchScreenProps {
   onNavigateToInterestRate?: () => void;
   onNavigateToExchangeRate?: () => void;
   onNavigateToLanguage?: () => void;
+  onNavigateToExchange?: () => void; // Жаңадан қосылған айырбастау экранына өту
 }
 
 export default function SearchScreen({ 
@@ -24,7 +25,8 @@ export default function SearchScreen({
   onNavigateToBranch, 
   onNavigateToInterestRate,
   onNavigateToExchangeRate,
-  onNavigateToLanguage
+  onNavigateToLanguage,
+  onNavigateToExchange
 }: SearchScreenProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -32,7 +34,7 @@ export default function SearchScreen({
     { title: 'Бөлімше', subtitle: 'Бөлімшені іздеу', icon: 'bank-outline', type: 'material-community', color: '#00B4D8', bg: '#E8F7FF', screen: 'branch' },
     { title: 'Пайыздық мөлшерлеме', subtitle: 'Мөлшерлемені іздеу', icon: 'trending-up', type: 'ionicons', color: '#FFB703', bg: '#FFF6E8', screen: 'interestRate' },
     { title: 'Валюта бағамы', subtitle: 'Бағамды іздеу', icon: 'exchange-alt', type: 'font-awesome5', color: '#FF4D6D', bg: '#FFE8EE', screen: 'exchangeRate' },
-    { title: 'Айырбастау', subtitle: 'Ақша сомасын айырбастау', icon: 'currency-usd', type: 'material-community', color: '#5C3BFF', bg: '#EEECFF', screen: 'exchangeRate' },
+    { title: 'Айырбастау', subtitle: 'Ақша сомасын айырбастау', icon: 'currency-usd', type: 'material-community', color: '#5C3BFF', bg: '#EEECFF', screen: 'exchange' },
     { title: 'Тіл', subtitle: 'Қолданба тілін өзгерту', icon: 'globe', type: 'ionicons', color: '#5C3BFF', bg: '#EEECFF', screen: 'language' },
   ];
 
@@ -94,6 +96,8 @@ export default function SearchScreen({
                   onNavigateToExchangeRate?.();
                 } else if (item.screen === 'language') {
                   onNavigateToLanguage?.();
+                } else if (item.screen === 'exchange') {
+                  onNavigateToExchange?.();
                 }
               }}
             >
@@ -168,7 +172,7 @@ const styles = StyleSheet.create({
   searchIcon: { marginRight: 8 },
   searchInput: { flex: 1, fontSize: 14, color: '#2D3748' },
   clearIcon: { padding: 5 },
-  scrollContent: { padding: 20, paddingBottom: 100 }, // Астыңғы панель жауып қалмауы үшін үлкен padding
+  scrollContent: { padding: 20, paddingBottom: 100 },
   searchCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
