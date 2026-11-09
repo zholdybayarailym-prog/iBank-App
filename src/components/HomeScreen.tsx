@@ -14,7 +14,8 @@ interface HomeScreenProps {
   userName?: string;
   userBalance?: string;
   onNavigateToSearch?: () => void;
-  onNavigateToExchange?: () => void; // <--- ЖАҢА: Айырбастау бетіне өту функциясы
+  onNavigateToExchange?: () => void;
+  onNavigateToTransfer?: () => void; // <--- ЖАҢА: Ақша аудару бетіне өту функциясы
 }
 
 export default function HomeScreen({ 
@@ -22,6 +23,7 @@ export default function HomeScreen({
   userBalance = '$3,469.52',
   onNavigateToSearch,
   onNavigateToExchange,
+  onNavigateToTransfer, // <--- Қабылдап алу
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -82,11 +84,11 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Шот пен карта</Text>
             </TouchableOpacity>
 
-            {/* 2. Ақша аудару -> Бұл батырманы басқанда ExchangeScreen ашылады */}
+            {/* 2. Ақша аудару -> Бұл батырманы басқанда TransferScreen ашылады */}
             <TouchableOpacity 
               style={styles.gridItem} 
               activeOpacity={0.7} 
-              onPress={onNavigateToExchange}
+              onPress={onNavigateToTransfer}
             >
               <View style={[styles.iconBox, { backgroundColor: '#FFE8EE' }]}>
                 <MaterialCommunityIcons name="swap-horizontal" size={24} color="#FF4D6D" />

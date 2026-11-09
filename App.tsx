@@ -12,6 +12,7 @@ import InterestRateScreen from './src/components/InterestRateScreen';
 import ExchangeRateScreen from './src/components/ExchangeRateScreen';
 import LanguageScreen from './src/components/LanguageScreen';
 import ExchangeScreen from './src/components/ExchangeScreen';
+import TransferScreen from './src/components/TransferScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -76,6 +77,8 @@ export default function App() {
       return (
         <HomeScreen
           onNavigateToSearch={() => setCurrentScreen('search')}
+          onNavigateToExchange={() => setCurrentScreen('exchange')}
+          onNavigateToTransfer={() => setCurrentScreen('transfer')}
         />
       );
 
@@ -125,11 +128,11 @@ export default function App() {
           onBack={() => setCurrentScreen('search')}
         />
       );
-    case 'home':
+
+    case 'transfer':
       return (
-        <HomeScreen
-          onNavigateToSearch={() => setCurrentScreen('search')}
-          onNavigateToExchange={() => setCurrentScreen('exchange')} // <--- Осы жолды қосасыз
+        <TransferScreen
+          onBack={() => setCurrentScreen('home')}
         />
       );
       
