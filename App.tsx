@@ -13,10 +13,21 @@ import ExchangeRateScreen from './src/components/ExchangeRateScreen';
 import LanguageScreen from './src/components/LanguageScreen';
 import ExchangeScreen from './src/components/ExchangeScreen';
 import TransferScreen from './src/components/TransferScreen';
+import ConfirmScreen from './src/components/ConfirmScreen';
+import TransferSuccessScreen from './src/components/TransferSuccessScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
+  
+  // Транзакция деректерін сақтауға арналған state
+  const [transferData, setTransferData] = useState({
+    fromAccount: '',
+    toName: '',
+    cardNumber: '',
+    amount: '',
+    content: '',
+  });
 
   console.log("Ағымдағы экран:", currentScreen);
 
@@ -133,8 +144,29 @@ export default function App() {
       return (
         <TransferScreen
           onBack={() => setCurrentScreen('home')}
+          onNavigateToConfirm={(data) => {
+            setTransferData(data);
+            setCurrentScreen('confirm');
+          }}
         />
       );
+
+    case 'confirm':
+  return (
+    <ConfirmScreen
+      transferData={transferData}
+      onBack={() => setCurrentScreen('transfer')}
+      onSuccess={() => setCurrentScreen('success')} // <--- сәтті аяқталғанда success экранына өтеді
+    />
+  );
+
+case 'success':
+  return (
+    <TransferSuccessScreen
+      transferData={transferData}
+      onBackHome={() => setCurrentScreen('home')}
+    />
+  );
       
     default:
       return (

@@ -17,6 +17,13 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface TransferScreenProps {
   onBack?: () => void;
+  onNavigateToConfirm?: (transferData: {
+    fromAccount: string;
+    toName: string;
+    cardNumber: string;
+    amount: string;
+    content: string;
+  }) => void;
 }
 
 const userAccounts = [
@@ -25,7 +32,7 @@ const userAccounts = [
   { id: '3', name: 'Digital USD Card', number: '5168 •••• •••• 1092', balance: '$500.00' },
 ];
 
-export default function TransferScreen({ onBack }: TransferScreenProps) {
+export default function TransferScreen({ onBack, onNavigateToConfirm }: TransferScreenProps) {
   const [selectedMethod, setSelectedMethod] = useState<number>(0);
   
   // Бастапқы алушылар тізімі
@@ -58,11 +65,16 @@ export default function TransferScreen({ onBack }: TransferScreenProps) {
       return;
     }
 
-    Alert.alert(
-      'Сәтті аяқталды!',
-      `${amount} сомасы ${name} атты азаматқа (${selectedAccount.name}) шотынан сәтті аударылды.`,
-      [{ text: 'Жарайды', onPress: onBack }]
-    );
+    // Ескі Alert.alert алынып тасталды, енді тікелей растау экранына өтеді
+    if (onNavigateToConfirm) {
+      onNavigateToConfirm({
+        fromAccount: `${selectedAccount.name} (${selectedAccount.number})`,
+        toName: name,
+        cardNumber: cardNumber,
+        amount: amount,
+        content: content || 'Ақша аудару',
+      });
+    }
   };
 
   // Жаңа алушыны тізімге қосу функциясы
@@ -72,7 +84,7 @@ export default function TransferScreen({ onBack }: TransferScreenProps) {
       return;
     }
 
-    const short = newFullName.split(' ')[0]; // Есімнің бірінші сөзін қысқа ат ретінде аламыз
+    const short = newFullName.split(' ')[0]; 
     const newObj = {
       id: Date.now().toString(),
       name: newFullName,
