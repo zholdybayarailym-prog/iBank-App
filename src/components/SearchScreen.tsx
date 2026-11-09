@@ -15,22 +15,25 @@ interface SearchScreenProps {
   onNavigateToHome?: () => void;
   onNavigateToBranch?: () => void;
   onNavigateToInterestRate?: () => void;
-  onNavigateToExchangeRate?: () => void; // <--- Қосылды
+  onNavigateToExchangeRate?: () => void;
+  onNavigateToLanguage?: () => void;
 }
 
 export default function SearchScreen({ 
   onNavigateToHome, 
   onNavigateToBranch, 
   onNavigateToInterestRate,
-  onNavigateToExchangeRate // <--- Қосылды
+  onNavigateToExchangeRate,
+  onNavigateToLanguage
 }: SearchScreenProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const searchItems = [
-    { title: 'Бөлімше', subtitle: 'Бөлімшені іздеу', icon: 'bank-outline', type: 'material-community', color: '#00B4D8', bg: '#E8F7FF' },
-    { title: 'Пайыздық мөлшерлеме', subtitle: 'Мөлшерлемені іздеу', icon: 'trending-up', type: 'ionicons', color: '#FFB703', bg: '#FFF6E8' },
-    { title: 'Валюта бағамы', subtitle: 'Бағамды іздеу', icon: 'exchange-alt', type: 'font-awesome5', color: '#FF4D6D', bg: '#FFE8EE' },
-    { title: 'Айырбастау', subtitle: 'Ақша сомасын айырбастау', icon: 'currency-usd', type: 'material-community', color: '#5C3BFF', bg: '#EEECFF' },
+    { title: 'Бөлімше', subtitle: 'Бөлімшені іздеу', icon: 'bank-outline', type: 'material-community', color: '#00B4D8', bg: '#E8F7FF', screen: 'branch' },
+    { title: 'Пайыздық мөлшерлеме', subtitle: 'Мөлшерлемені іздеу', icon: 'trending-up', type: 'ionicons', color: '#FFB703', bg: '#FFF6E8', screen: 'interestRate' },
+    { title: 'Валюта бағамы', subtitle: 'Бағамды іздеу', icon: 'exchange-alt', type: 'font-awesome5', color: '#FF4D6D', bg: '#FFE8EE', screen: 'exchangeRate' },
+    { title: 'Айырбастау', subtitle: 'Ақша сомасын айырбастау', icon: 'currency-usd', type: 'material-community', color: '#5C3BFF', bg: '#EEECFF', screen: 'exchangeRate' },
+    { title: 'Тіл', subtitle: 'Қолданба тілін өзгерту', icon: 'globe', type: 'ionicons', color: '#5C3BFF', bg: '#EEECFF', screen: 'language' },
   ];
 
   const filteredItems = searchItems.filter(item => 
@@ -42,6 +45,7 @@ export default function SearchScreen({
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
+      {/* Жоғарғы іздеу бөлігі */}
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContent}>
           <TouchableOpacity style={styles.backButton} onPress={onNavigateToHome}>
@@ -60,17 +64,21 @@ export default function SearchScreen({
             onChangeText={setSearchQuery}
             autoCapitalize="none"
             autoCorrect={false}
-            keyboardType="default"
           />
           {searchQuery.length > 0 && (
-            <TouchableOpacity onPress={() => setSearchQuery('')}>
+            <TouchableOpacity onPress={() => setSearchQuery('')} style={styles.clearIcon}>
               <Ionicons name="close-circle" size={18} color="#A0AEC0" />
             </TouchableOpacity>
           )}
         </View>
       </SafeAreaView>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      {/* Ортаңғы карточкалар тізімі */}
+      <ScrollView 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
             <TouchableOpacity 
@@ -78,12 +86,14 @@ export default function SearchScreen({
               style={styles.searchCard} 
               activeOpacity={0.7} 
               onPress={() => {
-                if (item.title === 'Бөлімше' && onNavigateToBranch) {
-                  onNavigateToBranch();
-                } else if (item.title === 'Пайыздық мөлшерлеме' && onNavigateToInterestRate) {
-                  onNavigateToInterestRate();
-                } else if (item.title === 'Валюта бағамы' && onNavigateToExchangeRate) {
-                  onNavigateToExchangeRate(); // <--- Қосылды
+                if (item.screen === 'branch') {
+                  onNavigateToBranch?.();
+                } else if (item.screen === 'interestRate') {
+                  onNavigateToInterestRate?.();
+                } else if (item.screen === 'exchangeRate') {
+                  onNavigateToExchangeRate?.();
+                } else if (item.screen === 'language') {
+                  onNavigateToLanguage?.();
                 }
               }}
             >
@@ -111,6 +121,7 @@ export default function SearchScreen({
         )}
       </ScrollView>
 
+      {/* Астыңғы меню панелі */}
       <View style={styles.bottomTabBar}>
         <TouchableOpacity style={styles.tabItem} onPress={onNavigateToHome}>
           <Feather name="home" size={22} color="#A0AEC0" />
@@ -121,11 +132,11 @@ export default function SearchScreen({
           <Text style={styles.tabTextActive}>Іздеу</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
           <Feather name="mail" size={22} color="#A0AEC0" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
           <Feather name="settings" size={22} color="#A0AEC0" />
         </TouchableOpacity>
       </View>
@@ -142,7 +153,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20, 
     paddingVertical: 12,
   },
-  backButton: { marginRight: 15 },
+  backButton: { marginRight: 15, padding: 5 },
   headerTitle: { color: '#1A202C', fontSize: 18, fontWeight: '700' },
   searchBarContainer: {
     flexDirection: 'row',
@@ -156,7 +167,8 @@ const styles = StyleSheet.create({
   },
   searchIcon: { marginRight: 8 },
   searchInput: { flex: 1, fontSize: 14, color: '#2D3748' },
-  scrollContent: { padding: 20, paddingBottom: 90 },
+  clearIcon: { padding: 5 },
+  scrollContent: { padding: 20, paddingBottom: 100 }, // Астыңғы панель жауып қалмауы үшін үлкен padding
   searchCard: {
     width: '100%',
     backgroundColor: '#FFFFFF',
@@ -189,7 +201,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 70,
+    height: 65,
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     justifyContent: 'space-around',

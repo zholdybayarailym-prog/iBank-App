@@ -9,24 +9,15 @@ import HomeScreen from './src/components/HomeScreen';
 import SearchScreen from './src/components/SearchScreen';
 import BranchScreen from './src/components/BranchScreen';
 import InterestRateScreen from './src/components/InterestRateScreen';
-import ExchangeRateScreen from './src/components/ExchangeRateScreen'; // <--- Қосылды
+import ExchangeRateScreen from './src/components/ExchangeRateScreen';
+import LanguageScreen from './src/components/LanguageScreen';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<
-    | 'signin'
-    | 'signup'
-    | 'forgot'
-    | 'verify'
-    | 'changePassword'
-    | 'passwordChanged'
-    | 'home'
-    | 'search'
-    | 'branch'
-    | 'interestRate'
-    | 'exchangeRate' // <--- Қосылды
-  >('signin');
-
+  const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
+
+  // Қай экран көрсетіліп тұрғанын тексеру үшін консольге шығарамыз
+  console.log("Ағымдағы экран:", currentScreen);
 
   switch (currentScreen) {
     case 'signin':
@@ -94,7 +85,8 @@ export default function App() {
           onNavigateToHome={() => setCurrentScreen('home')}
           onNavigateToBranch={() => setCurrentScreen('branch')}
           onNavigateToInterestRate={() => setCurrentScreen('interestRate')}
-          onNavigateToExchangeRate={() => setCurrentScreen('exchangeRate')} // <--- Қосылды
+          onNavigateToExchangeRate={() => setCurrentScreen('exchangeRate')}
+          onNavigateToLanguage={() => setCurrentScreen('language')}
         />
       );
 
@@ -112,9 +104,16 @@ export default function App() {
         />
       );
 
-    case 'exchangeRate': // <--- Қосылды
+    case 'exchangeRate':
       return (
         <ExchangeRateScreen
+          onNavigateBack={() => setCurrentScreen('search')}
+        />
+      );
+
+    case 'language':
+      return (
+        <LanguageScreen
           onNavigateBack={() => setCurrentScreen('search')}
         />
       );

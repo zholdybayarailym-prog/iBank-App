@@ -16,7 +16,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 interface SignInScreenProps {
   onSwitchToSignUp: () => void;
   onSwitchToForgotPassword: () => void;
-  onSignInSuccess: () => void; // Басты бетке өту үшін қосылды
+  onSignInSuccess: () => void;
 }
 
 export default function SignInScreen({
@@ -48,11 +48,12 @@ export default function SignInScreen({
       <View style={styles.contentContainer}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={{ flex: 1 }}
+          style={styles.keyboardView}
         >
           <ScrollView
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollContent}
+            keyboardShouldPersistTaps="handled" // <--- МАҢЫЗДЫ: Пернетақта ашық тұрғанда батырмалардың басылуын қамтамасыз етеді
           >
             <Text style={styles.title}>Қош келдіңіз!</Text>
             <Text style={styles.subtitle}>Жалғастыру үшін жүйеге кіріңіз</Text>
@@ -123,12 +124,12 @@ export default function SignInScreen({
             <TouchableOpacity 
               style={styles.signInButton} 
               activeOpacity={0.8}
-              onPress={onSignInSuccess} // Басқан кезде Басты бетке (HomeScreen) өтеді
+              onPress={onSignInSuccess}
             >
               <Text style={styles.signInButtonText}>Кіру</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.fingerprintContainer}>
+            <TouchableOpacity style={styles.fingerprintContainer} onPress={() => {}}>
               <MaterialCommunityIcons name="fingerprint" size={54} color="#5C3BFF" />
             </TouchableOpacity>
 
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#4C26C9' },
   topHeader: { height: 120, paddingHorizontal: 20, justifyContent: 'center' },
   headerContent: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
-  backButton: { marginRight: 15 },
+  backButton: { marginRight: 15, padding: 5 }, // Басу аймағын ұлғайту үшін
   headerTitle: { color: '#FFFFFF', fontSize: 20, fontWeight: '700' },
   contentContainer: {
     flex: 1,
@@ -158,8 +159,10 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingHorizontal: 24,
+    overflow: 'hidden',
   },
-  scrollContent: { paddingTop: 28, paddingBottom: 20, alignItems: 'center' },
+  keyboardView: { flex: 1 },
+  scrollContent: { paddingTop: 28, paddingBottom: 40, alignItems: 'center' },
   title: { fontSize: 24, fontWeight: 'bold', color: '#3B1E88', alignSelf: 'flex-start' },
   subtitle: { fontSize: 13, color: '#718096', alignSelf: 'flex-start', marginTop: 4, marginBottom: 20 },
   illustrationContainer: { width: 170, height: 170, justifyContent: 'center', alignItems: 'center', marginVertical: 10, position: 'relative' },
@@ -173,14 +176,14 @@ const styles = StyleSheet.create({
   dotOrange: { width: 18, height: 18, backgroundColor: '#FFB703', bottom: 30, left: 35 },
   dotBlue: { width: 12, height: 12, backgroundColor: '#00B4D8', bottom: 40, right: 35 },
   inputWrapper: { width: '100%', height: 52, borderWidth: 1, borderColor: '#E2E8F0', borderRadius: 26, paddingHorizontal: 20, justifyContent: 'center', marginTop: 14, position: 'relative' },
-  input: { fontSize: 14, color: '#2D3748' },
-  eyeIcon: { position: 'absolute', right: 20 },
-  forgotPasswordContainer: { alignSelf: 'flex-end', marginTop: 10, marginBottom: 24 },
+  input: { flex: 1, fontSize: 14, color: '#2D3748' },
+  eyeIcon: { position: 'absolute', right: 20, padding: 10 },
+  forgotPasswordContainer: { alignSelf: 'flex-end', marginTop: 10, marginBottom: 24, padding: 4 },
   forgotPasswordText: { fontSize: 12, color: '#718096', fontWeight: '600' },
   signInButton: { width: '100%', height: 52, backgroundColor: '#5C3BFF', borderRadius: 26, justifyContent: 'center', alignItems: 'center', marginBottom: 20 },
   signInButtonText: { fontSize: 16, fontWeight: '600', color: '#FFFFFF' },
-  fingerprintContainer: { marginVertical: 15 },
-  footer: { flexDirection: 'row', marginTop: 10 },
+  fingerprintContainer: { marginVertical: 15, padding: 10 },
+  footer: { flexDirection: 'row', marginTop: 10, alignItems: 'center' },
   footerText: { fontSize: 13, color: '#4A5568' },
-  signUpText: { fontSize: 13, fontWeight: 'bold', color: '#3B1E88' },
+  signUpText: { fontSize: 13, fontWeight: 'bold', color: '#3B1E88', padding: 5 },
 });
