@@ -23,6 +23,8 @@ interface TransferScreenProps {
     cardNumber: string;
     amount: string;
     content: string;
+    bank?: string;
+    branch?: string;
   }) => void;
 }
 
@@ -32,29 +34,44 @@ const userAccounts = [
   { id: '3', name: 'Digital USD Card', number: '5168 •••• •••• 1092', balance: '$500.00' },
 ];
 
+// Банктердің тізімі (суреттегідей)
+const bankList = [
+  'Fifth Third',
+  'Bank of the West',
+  'Wells Fargo',
+  'JP Morgan Chase',
+  'US bank',
+  'HSBS bank',
+  'Citybank',
+  'Ame Express',
+];
+
 export default function TransferScreen({ onBack, onNavigateToConfirm }: TransferScreenProps) {
-  const [selectedMethod, setSelectedMethod] = useState<number>(0);
+  const [selectedMethod, setSelectedMethod] = useState<number>(2); // 2: Басқа банкке
   
-  // Бастапқы алушылар тізімі
   const [beneficiaries, setBeneficiaries] = useState([
-    { id: '1', name: 'Abdrakhman Zupar', shortName: 'Abdrakhman', card: '4400430389983550' },
-    { id: '2', name: 'Nursulu Makhasheva', shortName: 'Nursulu', card: '4400123456789012' },
+    { id: '1', name: 'Nursulu Makhasheva', shortName: 'Nursulu', card: '4400123456789012', bank: 'US bank', branch: 'Алматы филиалы' },
+    { id: '2', name: 'Abdrakhman Zupar', shortName: 'Abdrakhman', card: '4400430389983550', bank: 'US bank', branch: 'Астана филиалы' },
   ]);
 
   const [selectedBeneficiaryId, setSelectedBeneficiaryId] = useState<string>('1');
-  
   const [selectedAccount, setSelectedAccount] = useState(userAccounts[0]);
   const [accountModalVisible, setAccountModalVisible] = useState(false);
 
-  // Жаңа алушы қосуға арналған Modal күйлері
+  // Банк таңдайтын модаль күйлері
+  const [bankModalVisible, setBankModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [newBeneficiaryModalVisible, setNewBeneficiaryModalVisible] = useState(false);
   const [newFullName, setNewFullName] = useState('');
   const [newCardNumber, setNewCardNumber] = useState('');
 
-  const [name, setName] = useState('Abdrakhman Zupar');
-  const [cardNumber, setCardNumber] = useState('4400430389983550');
-  const [amount, setAmount] = useState('');
-  const [content, setContent] = useState('');
+  const [bank, setBank] = useState('US bank');
+  const [branch, setBranch] = useState('Алматы филиалы');
+  const [name, setName] = useState('Nursulu Makhasheva');
+  const [cardNumber, setCardNumber] = useState('4400123456789012');
+  const [amount, setAmount] = useState('1000');
+  const [content, setContent] = useState('Ақша аудару');
   const [saveBeneficiary, setSaveBeneficiary] = useState(false);
 
   const handleTransfer = () => {
@@ -65,7 +82,6 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
       return;
     }
 
-    // Ескі Alert.alert алынып тасталды, енді тікелей растау экранына өтеді
     if (onNavigateToConfirm) {
       onNavigateToConfirm({
         fromAccount: `${selectedAccount.name} (${selectedAccount.number})`,
@@ -73,11 +89,12 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
         cardNumber: cardNumber,
         amount: amount,
         content: content || 'Ақша аудару',
+        bank: bank,
+        branch: branch,
       });
     }
   };
 
-  // Жаңа алушыны тізімге қосу функциясы
   const handleAddNewBeneficiary = () => {
     if (!newFullName || !newCardNumber) {
       Alert.alert('Қате', 'Аты-жөні мен карта нөмірін толтырыңыз!');
@@ -90,6 +107,8 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
       name: newFullName,
       shortName: short,
       card: newCardNumber,
+      bank: 'US bank',
+      branch: 'Алматы филиалы',
     };
 
     setBeneficiaries([...beneficiaries, newObj]);
@@ -102,6 +121,11 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
     setNewBeneficiaryModalVisible(false);
   };
 
+  // Банктерді іздеу фильтрі
+  const filteredBanks = bankList.filter((item) =>
+    item.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
@@ -112,17 +136,17 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Ақша аудару</Text>
+          <Text style={styles.headerTitle}>Аударым</Text>
         </View>
       </SafeAreaView>
 
       <ScrollView 
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         keyboardShouldPersistTaps="handled"
       >
         {/* Шотты/картаны таңдау өрісі */}
-        <Text style={styles.labelTitle}>Қай шоттан жіберу керек?</Text>
+        <Text style={styles.labelTitle}>Шотты/картаны таңдау</Text>
         <TouchableOpacity 
           style={styles.accountDropdown}
           onPress={() => setAccountModalVisible(true)}
@@ -141,15 +165,15 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             style={[styles.transTypeCard, selectedMethod === 0 && styles.transTypeCardActive]}
             onPress={() => setSelectedMethod(0)}
           >
-            <MaterialCommunityIcons name="credit-card-outline" size={26} color={selectedMethod === 0 ? '#5C3BFF' : '#718096'} />
-            <Text style={[styles.transTypeText, selectedMethod === 0 && styles.transTypeTextActive]}>Карта нөмірі арқылы</Text>
+            <MaterialCommunityIcons name="credit-card-outline" size={24} color={selectedMethod === 0 ? '#5C3BFF' : '#718096'} />
+            <Text style={[styles.transTypeText, selectedMethod === 0 && styles.transTypeTextActive]}>Карта арқылы</Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
             style={[styles.transTypeCard, selectedMethod === 1 && styles.transTypeCardActive]}
             onPress={() => setSelectedMethod(1)}
           >
-            <Ionicons name="person-outline" size={26} color={selectedMethod === 1 ? '#5C3BFF' : '#718096'} />
+            <Ionicons name="person-outline" size={24} color={selectedMethod === 1 ? '#5C3BFF' : '#718096'} />
             <Text style={[styles.transTypeText, selectedMethod === 1 && styles.transTypeTextActive]}>Өз банкі ішінде</Text>
           </TouchableOpacity>
 
@@ -157,7 +181,7 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             style={[styles.transTypeCard, selectedMethod === 2 && styles.transTypeCardActive]}
             onPress={() => setSelectedMethod(2)}
           >
-            <Ionicons name="business-outline" size={26} color={selectedMethod === 2 ? '#5C3BFF' : '#718096'} />
+            <Ionicons name="business-outline" size={24} color={selectedMethod === 2 ? '#5C3BFF' : '#718096'} />
             <Text style={[styles.transTypeText, selectedMethod === 2 && styles.transTypeTextActive]}>Басқа банкке</Text>
           </TouchableOpacity>
         </View>
@@ -166,12 +190,11 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
         <View style={styles.beneficiaryHeader}>
           <Text style={styles.sectionTitle}>Алушыны таңдау</Text>
           <TouchableOpacity>
-            <Text style={styles.findBeneficiaryText}>Алушыны іздеу</Text>
+            <Text style={styles.findBeneficiaryText}>Алушыны табу</Text>
           </TouchableOpacity>
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.beneficiaryScroll}>
-          {/* Жаңа алушы қосу түймесі (+) */}
           <TouchableOpacity 
             style={styles.beneficiaryCard}
             onPress={() => setNewBeneficiaryModalVisible(true)}
@@ -182,7 +205,6 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             <Text style={styles.beneficiaryName}>Жаңа</Text>
           </TouchableOpacity>
 
-          {/* Тізімдегі алушылар */}
           {beneficiaries.map((item) => (
             <TouchableOpacity 
               key={item.id}
@@ -191,10 +213,12 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
                 setSelectedBeneficiaryId(item.id);
                 setName(item.name);
                 setCardNumber(item.card);
+                setBank(item.bank);
+                setBranch(item.branch);
               }}
             >
               <View style={styles.beneficiaryAvatar}>
-                <Ionicons name="person" size={22} color="#5C3BFF" />
+                <Ionicons name="person" size={20} color="#5C3BFF" />
               </View>
               <Text style={styles.beneficiaryName} numberOfLines={1}>{item.shortName}</Text>
             </TouchableOpacity>
@@ -203,16 +227,44 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
 
         {/* Форма карточкасы */}
         <View style={styles.formCard}>
+          {/* Басқа банкке таңдалғанда банк таңдайтын өріс */}
+          {selectedMethod === 2 && (
+            <>
+              <Text style={styles.inputLabel}>Банкті таңдау</Text>
+              <TouchableOpacity 
+                style={styles.inputContainer}
+                onPress={() => setBankModalVisible(true)}
+              >
+                <Text style={{ fontSize: 14, color: '#2D3748' }}>{bank}</Text>
+                <Ionicons name="chevron-down" size={18} color="#A0AEC0" />
+              </TouchableOpacity>
+
+              <Text style={styles.inputLabel}>Филиалды таңдау</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Филиалды таңдаңыз"
+                  placeholderTextColor="#A0AEC0"
+                  value={branch}
+                  onChangeText={setBranch}
+                />
+                <Ionicons name="chevron-down" size={18} color="#A0AEC0" />
+              </View>
+            </>
+          )}
+
+          <Text style={styles.inputLabel}>Аты-жөні</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Аты-жөні"
+              placeholder="Алушының аты-жөні"
               placeholderTextColor="#A0AEC0"
               value={name}
               onChangeText={setName}
             />
           </View>
 
+          <Text style={styles.inputLabel}>Карта нөмірі</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
@@ -224,10 +276,11 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             />
           </View>
 
+          <Text style={styles.inputLabel}>Сомасы</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Сомасы"
+              placeholder="Соманы енгізіңіз"
               placeholderTextColor="#A0AEC0"
               keyboardType="numeric"
               value={amount}
@@ -235,17 +288,17 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             />
           </View>
 
+          <Text style={styles.inputLabel}>Ескерту</Text>
           <View style={styles.inputContainer}>
             <TextInput
               style={styles.input}
-              placeholder="Түсіндірме / Мақсаты"
+              placeholder="Мақсатын жазыңыз"
               placeholderTextColor="#A0AEC0"
               value={content}
               onChangeText={setContent}
             />
           </View>
 
-          {/* Сақтау құсбелгісі */}
           <TouchableOpacity 
             style={styles.checkboxRow} 
             activeOpacity={0.8}
@@ -257,18 +310,69 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             <Text style={styles.checkboxText}>Алушылар тізіміне сақтау</Text>
           </TouchableOpacity>
 
-          {/* Жіберу батырмасы */}
           <TouchableOpacity 
             style={styles.submitButton} 
             activeOpacity={0.8}
             onPress={handleTransfer}
           >
-            <Text style={styles.submitButtonText}>Аудару</Text>
+            <Text style={styles.submitButtonText}>Растау</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
-      {/* Шотты таңдауға арналған модальды терезе */}
+      {/* 1. БАНКТІ ТАҢДАУҒА АРНАЛҒАН МОДАЛЬДЫ ТЕРЕЗЕ (Суреттегідей) */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={bankModalVisible}
+        onRequestClose={() => setBankModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.bankModalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Choose beneficiary bank</Text>
+              <TouchableOpacity onPress={() => setBankModalVisible(false)}>
+                <Ionicons name="close" size={24} color="#1A202C" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Іздеу жолағы */}
+            <View style={styles.searchContainer}>
+              <Ionicons name="search" size={18} color="#A0AEC0" style={{ marginRight: 8 }} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search"
+                placeholderTextColor="#A0AEC0"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+              />
+            </View>
+
+            {/* Банктер тізімі */}
+            <FlatList
+              data={filteredBanks}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={styles.bankItem}
+                  onPress={() => {
+                    setBank(item);
+                    setBankModalVisible(false);
+                    setSearchQuery('');
+                  }}
+                >
+                  <Text style={styles.bankItemText}>{item}</Text>
+                  {bank === item && (
+                    <Ionicons name="checkmark" size={18} color="#5C3BFF" />
+                  )}
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
+      </Modal>
+
+      {/* 2. ШОТТЫ ТАҢДАУ МОДАЛЫ */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -312,7 +416,7 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
         </View>
       </Modal>
 
-      {/* Жаңа алушы қосуға арналған модальды терезе */}
+      {/* 3. ЖАҢА АЛУШЫ ҚОСУ МОДАЛЫ */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -331,7 +435,7 @@ export default function TransferScreen({ onBack, onNavigateToConfirm }: Transfer
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
-                placeholder="Аты-жөні (Мысалы: Айбек Серік)"
+                placeholder="Аты-жөні"
                 placeholderTextColor="#A0AEC0"
                 value={newFullName}
                 onChangeText={setNewFullName}
@@ -374,8 +478,8 @@ const styles = StyleSheet.create({
   },
   backButton: { marginRight: 15, padding: 5 },
   headerTitle: { color: '#1A202C', fontSize: 18, fontWeight: '700' },
-  scrollContent: { padding: 20, paddingBottom: 60 },
-  labelTitle: { fontSize: 13, color: '#718096', fontWeight: '600', marginBottom: 6 },
+  scrollContent: { padding: 20, paddingBottom: 120 },
+  labelTitle: { fontSize: 12, color: '#718096', fontWeight: '600', marginBottom: 6 },
   accountDropdown: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -390,44 +494,44 @@ const styles = StyleSheet.create({
   },
   accountDropdownTitle: { fontSize: 14, color: '#1A202C', fontWeight: '700' },
   accountDropdownSub: { fontSize: 12, color: '#718096', marginTop: 2 },
-  sectionTitle: { fontSize: 14, fontWeight: '700', color: '#1A202C', marginBottom: 12 },
+  sectionTitle: { fontSize: 13, fontWeight: '700', color: '#1A202C', marginBottom: 10 },
   transactionTypesRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   transTypeCard: {
     width: '31%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 12,
+    borderRadius: 14,
+    padding: 10,
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    height: 95,
+    height: 85,
     justifyContent: 'center',
   },
   transTypeCardActive: {
     borderColor: '#5C3BFF',
     backgroundColor: '#EEECFF',
   },
-  transTypeText: { fontSize: 11, color: '#718096', textAlign: 'center', marginTop: 6, fontWeight: '500' },
+  transTypeText: { fontSize: 11, color: '#718096', textAlign: 'center', marginTop: 4, fontWeight: '500' },
   transTypeTextActive: { color: '#5C3BFF', fontWeight: '700' },
   beneficiaryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 8,
   },
-  findBeneficiaryText: { fontSize: 13, color: '#5C3BFF', fontWeight: '600' },
-  beneficiaryScroll: { marginBottom: 24 },
+  findBeneficiaryText: { fontSize: 12, color: '#5C3BFF', fontWeight: '600' },
+  beneficiaryScroll: { marginBottom: 20 },
   beneficiaryCard: {
     alignItems: 'center',
     marginRight: 12,
     backgroundColor: '#FFFFFF',
-    padding: 12,
-    borderRadius: 16,
-    width: 90,
+    padding: 10,
+    borderRadius: 14,
+    width: 80,
     borderWidth: 1,
     borderColor: '#E2E8F0',
     justifyContent: 'center',
@@ -437,80 +541,85 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEECFF',
   },
   addBeneficiaryIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#EEECFF',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   beneficiaryAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#F1F5F9',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   beneficiaryName: { fontSize: 11, color: '#2D3748', fontWeight: '600', textAlign: 'center' },
   formCard: {
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
-    padding: 20,
+    borderRadius: 20,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.03,
+    shadowRadius: 6,
+    elevation: 2,
   },
+  inputLabel: { fontSize: 12, color: '#718096', fontWeight: '600', marginBottom: 6 },
   inputContainer: {
     borderWidth: 1,
     borderColor: '#E2E8F0',
     borderRadius: 14,
     paddingHorizontal: 14,
-    height: 50,
-    justifyContent: 'center',
-    marginBottom: 14,
+    height: 48,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginBottom: 12,
     backgroundColor: '#FFFFFF',
   },
-  input: { fontSize: 14, color: '#2D3748' },
+  input: { flex: 1, fontSize: 14, color: '#2D3748' },
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 6,
-    marginBottom: 20,
+    marginTop: 4,
+    marginBottom: 16,
   },
   checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 6,
+    width: 18,
+    height: 18,
+    borderRadius: 5,
     borderWidth: 2,
     borderColor: '#CBD5E0',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 10,
+    marginRight: 8,
   },
   checkboxChecked: {
     backgroundColor: '#5C3BFF',
     borderColor: '#5C3BFF',
   },
-  checkboxText: { fontSize: 13, color: '#4A5568', fontWeight: '500' },
+  checkboxText: { fontSize: 12, color: '#4A5568', fontWeight: '500' },
   submitButton: {
     width: '100%',
-    height: 52,
+    height: 50,
     backgroundColor: '#5C3BFF',
-    borderRadius: 26,
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#5C3BFF',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  submitButtonText: { fontSize: 16, fontWeight: '700', color: '#FFFFFF' },
+  submitButtonText: { fontSize: 15, fontWeight: '700', color: '#FFFFFF' },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -523,6 +632,13 @@ const styles = StyleSheet.create({
     padding: 24,
     maxHeight: '50%',
   },
+  bankModalContent: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    padding: 24,
+    height: '65%',
+  },
   modalHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -530,6 +646,35 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   modalTitle: { fontSize: 16, fontWeight: '700', color: '#1A202C' },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    height: 46,
+    backgroundColor: '#F8FAFC',
+    marginBottom: 12,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 14,
+    color: '#2D3748',
+  },
+  bankItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  bankItemText: {
+    fontSize: 14,
+    color: '#2D3748',
+    fontWeight: '500',
+  },
   accountItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',

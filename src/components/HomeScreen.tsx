@@ -15,7 +15,8 @@ interface HomeScreenProps {
   userBalance?: string;
   onNavigateToSearch?: () => void;
   onNavigateToExchange?: () => void;
-  onNavigateToTransfer?: () => void; // <--- ЖАҢА: Ақша аудару бетіне өту функциясы
+  onNavigateToTransfer?: () => void;
+  onNavigateToMessage?: () => void; // <--- ЖАҢА: Хабарламалар бетіне өту функциясы
 }
 
 export default function HomeScreen({ 
@@ -23,7 +24,8 @@ export default function HomeScreen({
   userBalance = '$3,469.52',
   onNavigateToSearch,
   onNavigateToExchange,
-  onNavigateToTransfer, // <--- Қабылдап алу
+  onNavigateToTransfer,
+  onNavigateToMessage, // <--- Қабылдап алу
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -84,7 +86,7 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Шот пен карта</Text>
             </TouchableOpacity>
 
-            {/* 2. Ақша аудару -> Бұл батырманы басқанда TransferScreen ашылады */}
+            {/* 2. Ақша аудару */}
             <TouchableOpacity 
               style={styles.gridItem} 
               activeOpacity={0.7} 
@@ -167,7 +169,8 @@ export default function HomeScreen({
             <Feather name="search" size={22} color="#A0AEC0" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.tabItem}>
+          {/* Хабарламалар бетіне өтетін түйме */}
+          <TouchableOpacity style={styles.tabItem} onPress={onNavigateToMessage}>
             <Feather name="mail" size={22} color="#A0AEC0" />
           </TouchableOpacity>
 

@@ -17,7 +17,8 @@ interface SearchScreenProps {
   onNavigateToInterestRate?: () => void;
   onNavigateToExchangeRate?: () => void;
   onNavigateToLanguage?: () => void;
-  onNavigateToExchange?: () => void; // Жаңадан қосылған айырбастау экранына өту
+  onNavigateToExchange?: () => void;
+  onNavigateToMessage?: () => void; // <--- ЖАҢА: Хабарламалар бетіне өту функциясы
 }
 
 export default function SearchScreen({ 
@@ -26,7 +27,8 @@ export default function SearchScreen({
   onNavigateToInterestRate,
   onNavigateToExchangeRate,
   onNavigateToLanguage,
-  onNavigateToExchange
+  onNavigateToExchange,
+  onNavigateToMessage // <--- Қабылдап алу
 }: SearchScreenProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -136,7 +138,8 @@ export default function SearchScreen({
           <Text style={styles.tabTextActive}>Іздеу</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
+        {/* Хабарламалар бетіне өтетін түйме */}
+        <TouchableOpacity style={styles.tabItem} onPress={onNavigateToMessage}>
           <Feather name="mail" size={22} color="#A0AEC0" />
         </TouchableOpacity>
 

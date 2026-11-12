@@ -39,14 +39,12 @@ export default function ConfirmScreen({
   
   const [otp, setOtp] = useState('');
 
-  // Растау сәтті аяқталған кездегі хабарлама
-  const handleConfirmSuccess = (method: string) => {
+  // Тікелей сәтті экранына өту функциясы
+  const handleDirectSuccess = (method: string) => {
     Keyboard.dismiss();
-    Alert.alert(
-      'Сәтті аяқталды! 🎉',
-      `${method} арқылы расталды және ${transferData.amount} сомасы сәтті жіберілді.`,
-      [{ text: 'Жарайды', onPress: onSuccess }]
-    );
+    if (onSuccess) {
+      onSuccess(); // Тікелей келесі бетке өтеді
+    }
   };
 
   const handleOtpConfirm = () => {
@@ -54,7 +52,7 @@ export default function ConfirmScreen({
       Alert.alert('Қате', 'OTP кодын енгізіңіз!');
       return;
     }
-    handleConfirmSuccess('OTP код');
+    handleDirectSuccess('OTP код');
   };
 
   return (
@@ -67,7 +65,7 @@ export default function ConfirmScreen({
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Confirm</Text>
+          <Text style={styles.headerTitle}>Растау</Text>
         </View>
       </SafeAreaView>
 
@@ -76,10 +74,10 @@ export default function ConfirmScreen({
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        <Text style={styles.sectionSubtitle}>Confirm transaction information</Text>
+        <Text style={styles.sectionSubtitle}>Транзакция ақпаратын растау</Text>
 
         {/* Қайдан */}
-        <Text style={styles.label}>From</Text>
+        <Text style={styles.label}>Қайдан</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -89,7 +87,7 @@ export default function ConfirmScreen({
         </View>
 
         {/* Кімге */}
-        <Text style={styles.label}>To</Text>
+        <Text style={styles.label}>Кімге</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -99,7 +97,7 @@ export default function ConfirmScreen({
         </View>
 
         {/* Карта нөмірі */}
-        <Text style={styles.label}>Card number</Text>
+        <Text style={styles.label}>Карта нөмірі</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -109,7 +107,7 @@ export default function ConfirmScreen({
         </View>
 
         {/* Комиссия */}
-        <Text style={styles.label}>Transaction fee</Text>
+        <Text style={styles.label}>Комиссия</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -119,7 +117,7 @@ export default function ConfirmScreen({
         </View>
 
         {/* Мақсаты */}
-        <Text style={styles.label}>Content</Text>
+        <Text style={styles.label}>Мақсаты</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -129,7 +127,7 @@ export default function ConfirmScreen({
         </View>
 
         {/* Сомасы */}
-        <Text style={styles.label}>Amount</Text>
+        <Text style={styles.label}>Сомасы</Text>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -146,7 +144,7 @@ export default function ConfirmScreen({
           <TouchableOpacity 
             style={styles.biometricCard}
             activeOpacity={0.7}
-            onPress={() => handleConfirmSuccess('Face ID')}
+            onPress={() => handleDirectSuccess('Face ID')}
           >
             <MaterialCommunityIcons name="face-recognition" size={40} color="#5C3BFF" />
             <Text style={styles.biometricText}>Face ID</Text>
@@ -156,7 +154,7 @@ export default function ConfirmScreen({
           <TouchableOpacity 
             style={styles.biometricCard}
             activeOpacity={0.7}
-            onPress={() => handleConfirmSuccess('Саусақ ізі')}
+            onPress={() => handleDirectSuccess('Саусақ ізі')}
           >
             <MaterialCommunityIcons name="fingerprint" size={40} color="#5C3BFF" />
             <Text style={styles.biometricText}>Touch ID</Text>
@@ -190,7 +188,7 @@ export default function ConfirmScreen({
           activeOpacity={0.8}
           onPress={handleOtpConfirm}
         >
-          <Text style={styles.submitButtonText}>Confirm</Text>
+          <Text style={styles.submitButtonText}>Растау</Text>
         </TouchableOpacity>
       </ScrollView>
     </View>

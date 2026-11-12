@@ -15,6 +15,7 @@ import ExchangeScreen from './src/components/ExchangeScreen';
 import TransferScreen from './src/components/TransferScreen';
 import ConfirmScreen from './src/components/ConfirmScreen';
 import TransferSuccessScreen from './src/components/TransferSuccessScreen';
+import MessageScreen from './src/components/MessageScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -90,6 +91,7 @@ export default function App() {
           onNavigateToSearch={() => setCurrentScreen('search')}
           onNavigateToExchange={() => setCurrentScreen('exchange')}
           onNavigateToTransfer={() => setCurrentScreen('transfer')}
+          onNavigateToMessage={() => setCurrentScreen('message')} // <--- Хабарламаларға өту
         />
       );
 
@@ -102,6 +104,16 @@ export default function App() {
           onNavigateToExchangeRate={() => setCurrentScreen('exchangeRate')}
           onNavigateToLanguage={() => setCurrentScreen('language')}
           onNavigateToExchange={() => setCurrentScreen('exchange')}
+          onNavigateToMessage={() => setCurrentScreen('message')} // <--- Хабарламаларға өту
+        />
+      );
+
+    case 'message': // <--- Жаңа Хабарламалар экраны
+      return (
+        <MessageScreen
+          onBack={() => setCurrentScreen('home')}
+          onNavigateToHome={() => setCurrentScreen('home')}
+          onNavigateToSearch={() => setCurrentScreen('search')}
         />
       );
 
@@ -152,21 +164,21 @@ export default function App() {
       );
 
     case 'confirm':
-  return (
-    <ConfirmScreen
-      transferData={transferData}
-      onBack={() => setCurrentScreen('transfer')}
-      onSuccess={() => setCurrentScreen('success')} // <--- сәтті аяқталғанда success экранына өтеді
-    />
-  );
+      return (
+        <ConfirmScreen
+          transferData={transferData}
+          onBack={() => setCurrentScreen('transfer')}
+          onSuccess={() => setCurrentScreen('success')}
+        />
+      );
 
-case 'success':
-  return (
-    <TransferSuccessScreen
-      transferData={transferData}
-      onBackHome={() => setCurrentScreen('home')}
-    />
-  );
+    case 'success':
+      return (
+        <TransferSuccessScreen
+          transferData={transferData}
+          onBackHome={() => setCurrentScreen('home')}
+        />
+      );
       
     default:
       return (
