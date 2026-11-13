@@ -16,7 +16,8 @@ interface HomeScreenProps {
   onNavigateToSearch?: () => void;
   onNavigateToExchange?: () => void;
   onNavigateToTransfer?: () => void;
-  onNavigateToMessage?: () => void; // <--- ЖАҢА: Хабарламалар бетіне өту функциясы
+  onNavigateToMessage?: () => void;
+  onNavigateToSettings?: () => void; // <--- ЖАҢА: Баптауларға өту функциясы
 }
 
 export default function HomeScreen({ 
@@ -25,7 +26,8 @@ export default function HomeScreen({
   onNavigateToSearch,
   onNavigateToExchange,
   onNavigateToTransfer,
-  onNavigateToMessage, // <--- Қабылдап алу
+  onNavigateToMessage,
+  onNavigateToSettings, // <--- Қабылдап алу
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -174,7 +176,8 @@ export default function HomeScreen({
             <Feather name="mail" size={22} color="#A0AEC0" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.tabItem}>
+          {/* Баптаулар бетіне өтетін түйме */}
+          <TouchableOpacity style={styles.tabItem} onPress={onNavigateToSettings}>
             <Feather name="settings" size={22} color="#A0AEC0" />
           </TouchableOpacity>
         </View>

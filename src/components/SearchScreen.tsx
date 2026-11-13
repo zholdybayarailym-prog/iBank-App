@@ -18,7 +18,8 @@ interface SearchScreenProps {
   onNavigateToExchangeRate?: () => void;
   onNavigateToLanguage?: () => void;
   onNavigateToExchange?: () => void;
-  onNavigateToMessage?: () => void; // <--- ЖАҢА: Хабарламалар бетіне өту функциясы
+  onNavigateToMessage?: () => void;
+  onNavigateToSettings?: () => void; // <--- Баптауларға өту функциясы
 }
 
 export default function SearchScreen({ 
@@ -28,7 +29,8 @@ export default function SearchScreen({
   onNavigateToExchangeRate,
   onNavigateToLanguage,
   onNavigateToExchange,
-  onNavigateToMessage // <--- Қабылдап алу
+  onNavigateToMessage,
+  onNavigateToSettings // <--- Қабылдап алу
 }: SearchScreenProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -143,7 +145,8 @@ export default function SearchScreen({
           <Feather name="mail" size={22} color="#A0AEC0" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
+        {/* Баптаулар бетіне өтетін түйме */}
+        <TouchableOpacity style={styles.tabItem} onPress={onNavigateToSettings}>
           <Feather name="settings" size={22} color="#A0AEC0" />
         </TouchableOpacity>
       </View>

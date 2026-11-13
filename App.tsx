@@ -16,7 +16,9 @@ import TransferScreen from './src/components/TransferScreen';
 import ConfirmScreen from './src/components/ConfirmScreen';
 import TransferSuccessScreen from './src/components/TransferSuccessScreen';
 import MessageScreen from './src/components/MessageScreen';
-import MessageDetailScreen from './src/components/MessageDetailScreen'; 
+import MessageDetailScreen from './src/components/MessageDetailScreen';
+import SettingScreen from './src/components/SettingScreen';
+import AppInfoScreen from './src/components/AppInfoScreen'; // <--- 1. Жаңа "Қолданба туралы" беті импортталды
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -96,6 +98,7 @@ export default function App() {
           onNavigateToExchange={() => setCurrentScreen('exchange')}
           onNavigateToTransfer={() => setCurrentScreen('transfer')}
           onNavigateToMessage={() => setCurrentScreen('message')}
+          onNavigateToSettings={() => setCurrentScreen('setting')}
         />
       );
 
@@ -109,6 +112,7 @@ export default function App() {
           onNavigateToLanguage={() => setCurrentScreen('language')}
           onNavigateToExchange={() => setCurrentScreen('exchange')}
           onNavigateToMessage={() => setCurrentScreen('message')}
+          onNavigateToSettings={() => setCurrentScreen('setting')}
         />
       );
 
@@ -118,18 +122,38 @@ export default function App() {
           onBack={() => setCurrentScreen('home')}
           onNavigateToHome={() => setCurrentScreen('home')}
           onNavigateToSearch={() => setCurrentScreen('search')}
-          onNavigateToDetail={(bankName) => { // <--- Қай банк басылғанын қабылдап, чатқа жібереді
+          onNavigateToSettings={() => setCurrentScreen('setting')}
+          onNavigateToDetail={(bankName) => {
             setSelectedBankName(bankName);
             setCurrentScreen('messageDetail');
           }}
         />
       );
 
-    case 'messageDetail': // <--- Чат экраны (MessageDetailScreen)
+    case 'messageDetail':
       return (
         <MessageDetailScreen
           bankName={selectedBankName}
           onBack={() => setCurrentScreen('message')}
+        />
+      );
+
+    case 'setting':
+      return (
+        <SettingScreen
+          onBack={() => setCurrentScreen('home')}
+          onNavigateToHome={() => setCurrentScreen('home')}
+          onNavigateToSearch={() => setCurrentScreen('search')}
+          onNavigateToMessage={() => setCurrentScreen('message')}
+          onNavigateToLanguage={() => setCurrentScreen('language')}
+          onNavigateToAppInfo={() => setCurrentScreen('appInfo')} // <--- 2. Баптаулардан "App information" бетіне өту қосылды
+        />
+      );
+
+    case 'appInfo': // <--- 3. "Қолданба туралы" экраны
+      return (
+        <AppInfoScreen
+          onBack={() => setCurrentScreen('setting')}
         />
       );
 
