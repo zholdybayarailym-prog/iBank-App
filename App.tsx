@@ -16,10 +16,14 @@ import TransferScreen from './src/components/TransferScreen';
 import ConfirmScreen from './src/components/ConfirmScreen';
 import TransferSuccessScreen from './src/components/TransferSuccessScreen';
 import MessageScreen from './src/components/MessageScreen';
+import MessageDetailScreen from './src/components/MessageDetailScreen'; 
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
+  
+  // Чатқа өтетін банктің атын сақтауға арналған state
+  const [selectedBankName, setSelectedBankName] = useState('Bank of America');
   
   // Транзакция деректерін сақтауға арналған state
   const [transferData, setTransferData] = useState({
@@ -91,7 +95,7 @@ export default function App() {
           onNavigateToSearch={() => setCurrentScreen('search')}
           onNavigateToExchange={() => setCurrentScreen('exchange')}
           onNavigateToTransfer={() => setCurrentScreen('transfer')}
-          onNavigateToMessage={() => setCurrentScreen('message')} // <--- Хабарламаларға өту
+          onNavigateToMessage={() => setCurrentScreen('message')}
         />
       );
 
@@ -104,16 +108,28 @@ export default function App() {
           onNavigateToExchangeRate={() => setCurrentScreen('exchangeRate')}
           onNavigateToLanguage={() => setCurrentScreen('language')}
           onNavigateToExchange={() => setCurrentScreen('exchange')}
-          onNavigateToMessage={() => setCurrentScreen('message')} // <--- Хабарламаларға өту
+          onNavigateToMessage={() => setCurrentScreen('message')}
         />
       );
 
-    case 'message': // <--- Жаңа Хабарламалар экраны
+    case 'message':
       return (
         <MessageScreen
           onBack={() => setCurrentScreen('home')}
           onNavigateToHome={() => setCurrentScreen('home')}
           onNavigateToSearch={() => setCurrentScreen('search')}
+          onNavigateToDetail={(bankName) => { // <--- Қай банк басылғанын қабылдап, чатқа жібереді
+            setSelectedBankName(bankName);
+            setCurrentScreen('messageDetail');
+          }}
+        />
+      );
+
+    case 'messageDetail': // <--- Чат экраны (MessageDetailScreen)
+      return (
+        <MessageDetailScreen
+          bankName={selectedBankName}
+          onBack={() => setCurrentScreen('message')}
         />
       );
 

@@ -15,45 +15,46 @@ interface MessageScreenProps {
   onNavigateToHome?: () => void;
   onNavigateToSearch?: () => void;
   onNavigateToSettings?: () => void;
+  onNavigateToDetail?: (bankName: string) => void;
 }
 
 const messagesData = [
   {
     id: '1',
     title: 'Bank of America',
-    description: 'Bank of America: 256438 is the ou...',
-    time: 'Today',
-    icon: 'business', // <--- 'bank' орнына 'business' деп өзгертілді (Ionicons үшін дұрыс)
+    description: 'Сіздің шотыңыздан $1,200 көлемінде аударым жасалды. Растау үшін тексеріңіз.',
+    time: 'Бүгін',
+    icon: 'business',
     iconBg: '#4F46E5',
   },
   {
     id: '2',
-    title: 'Account',
-    description: 'Your account is limited. Please foll...',
+    title: 'Қауіпсіздік',
+    description: 'Шотқа кіру шектелді. Қауіпсіздік үшін деректеріңізді жаңартыңыз.',
     time: '12/10',
     icon: 'person',
     iconBg: '#EF4444',
   },
   {
     id: '3',
-    title: 'Alert',
-    description: 'Your statement is ready for you to...',
+    title: 'Хабарлама',
+    description: 'Жаңа айлық үзінді көшірмеңіз дайын болды. Көру үшін басыңыз.',
     time: '11/10',
     icon: 'notifications',
     iconBg: '#0EA5E9',
   },
   {
     id: '4',
-    title: 'Paypal',
-    description: 'Your account has been locked. Ple...',
+    title: 'PayPal',
+    description: 'Шот қауіпсіздік мақсатында уақытша бұғатталды. Шешу жолдарын қараңыз.',
     time: '10/11',
     icon: 'logo-paypal',
     iconBg: '#F59E0B',
   },
   {
     id: '5',
-    title: 'Withdraw',
-    description: 'Dear customer, 2987456 is your co...',
+    title: 'Ақша алу',
+    description: 'Құрметті клиент, банкоматтан ақша шешуге арналған растау коды: 2987456.',
     time: '10/12',
     icon: 'card',
     iconBg: '#10B981',
@@ -65,6 +66,7 @@ export default function MessageScreen({
   onNavigateToHome,
   onNavigateToSearch,
   onNavigateToSettings,
+  onNavigateToDetail,
 }: MessageScreenProps) {
   return (
     <View style={styles.container}>
@@ -86,7 +88,12 @@ export default function MessageScreen({
         showsVerticalScrollIndicator={false}
       >
         {messagesData.map((item) => (
-          <TouchableOpacity key={item.id} style={styles.messageCard} activeOpacity={0.7}>
+          <TouchableOpacity 
+            key={item.id} 
+            style={styles.messageCard} 
+            activeOpacity={0.7}
+            onPress={() => onNavigateToDetail?.(item.title)}
+          >
             <View style={[styles.iconContainer, { backgroundColor: item.iconBg }]}>
               <Ionicons name={item.icon as any} size={22} color="#FFFFFF" />
             </View>
