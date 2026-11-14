@@ -26,11 +26,13 @@ import WithdrawScreen from './src/components/WithdrawScreen';
 import MobilePrepaidScreen from './src/components/MobilePrepaidScreen';
 import MobilePrepaidConfirmScreen from './src/components/MobilePrepaidConfirmScreen';
 import MobilePrepaidSuccessScreen from './src/components/MobilePrepaidSuccessScreen';
+import PayBillsScreen from './src/components/PayBillsScreen';
+import PaymentHistoryScreen from './src/components/PaymentHistoryScreen';
+import PaymentDetailScreen from './src/components/PaymentDetailScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
-  
   const [selectedBankName, setSelectedBankName] = useState('Bank of America');
   
   const [transferData, setTransferData] = useState({
@@ -54,11 +56,7 @@ export default function App() {
       );
 
     case 'signup':
-      return (
-        <SignUpScreen
-          onSwitchToSignIn={() => setCurrentScreen('signin')}
-        />
-      );
+      return <SignUpScreen onSwitchToSignIn={() => setCurrentScreen('signin')} />;
 
     case 'forgot':
       return (
@@ -109,6 +107,31 @@ export default function App() {
           onNavigateToAccountAndCard={() => setCurrentScreen('accountAndCard')}
           onNavigateToWithdraw={() => setCurrentScreen('withdraw')}
           onNavigateToMobilePrepaid={() => setCurrentScreen('mobilePrepaid')}
+          onNavigateToPayBills={() => setCurrentScreen('payBills')}
+        />
+      );
+
+    case 'payBills':
+      return (
+        <PayBillsScreen
+          onBack={() => setCurrentScreen('home')}
+          onNavigateToMobilePrepaid={() => setCurrentScreen('mobilePrepaid')}
+          onNavigateToInternet={() => setCurrentScreen('paymentDetail')}
+          onNavigateToHistory={() => setCurrentScreen('paymentHistory')}
+        />
+      );
+
+    case 'paymentHistory':
+      return (
+        <PaymentHistoryScreen
+          onBack={() => setCurrentScreen('payBills')}
+        />
+      );
+
+    case 'paymentDetail':
+      return (
+        <PaymentDetailScreen
+          onBack={() => setCurrentScreen('payBills')}
         />
       );
 
@@ -217,46 +240,22 @@ export default function App() {
       );
 
     case 'appInfo':
-      return (
-        <AppInfoScreen
-          onBack={() => setCurrentScreen('setting')}
-        />
-      );
+      return <AppInfoScreen onBack={() => setCurrentScreen('setting')} />;
 
     case 'branch':
-      return (
-        <BranchScreen
-          onBack={() => setCurrentScreen('search')}
-        />
-      );
+      return <BranchScreen onBack={() => setCurrentScreen('search')} />;
 
     case 'interestRate':
-      return (
-        <InterestRateScreen
-          onNavigateBack={() => setCurrentScreen('search')}
-        />
-      );
+      return <InterestRateScreen onNavigateBack={() => setCurrentScreen('search')} />;
 
     case 'exchangeRate':
-      return (
-        <ExchangeRateScreen
-          onNavigateBack={() => setCurrentScreen('search')}
-        />
-      );
+      return <ExchangeRateScreen onNavigateBack={() => setCurrentScreen('search')} />;
 
     case 'language':
-      return (
-        <LanguageScreen
-          onNavigateBack={() => setCurrentScreen('search')}
-        />
-      );
+      return <LanguageScreen onNavigateBack={() => setCurrentScreen('search')} />;
 
     case 'exchange':
-      return (
-        <ExchangeScreen
-          onBack={() => setCurrentScreen('search')}
-        />
-      );
+      return <ExchangeScreen onBack={() => setCurrentScreen('search')} />;
 
     case 'transfer':
       return (

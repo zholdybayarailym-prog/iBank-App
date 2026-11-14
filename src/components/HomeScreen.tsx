@@ -21,7 +21,8 @@ interface HomeScreenProps {
   onNavigateToTransactionReport?: () => void;
   onNavigateToAccountAndCard?: () => void;
   onNavigateToWithdraw?: () => void;
-  onNavigateToMobilePrepaid?: () => void; // <--- Мобильді байланысқа өту функциясы қосылды
+  onNavigateToMobilePrepaid?: () => void;
+  onNavigateToPayBills?: () => void;
 }
 
 export default function HomeScreen({ 
@@ -35,7 +36,8 @@ export default function HomeScreen({
   onNavigateToTransactionReport,
   onNavigateToAccountAndCard,
   onNavigateToWithdraw,
-  onNavigateToMobilePrepaid, // <--- Қабылдап алу
+  onNavigateToMobilePrepaid,
+  onNavigateToPayBills,
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -128,7 +130,7 @@ export default function HomeScreen({
             <TouchableOpacity 
               style={styles.gridItem} 
               activeOpacity={0.7}
-              onPress={onNavigateToMobilePrepaid} // <--- Мобильді байланыс экранына қосылды
+              onPress={onNavigateToMobilePrepaid}
             >
               <View style={[styles.iconBox, { backgroundColor: '#FFF6E8' }]}>
                 <Ionicons name="phone-portrait-outline" size={24} color="#FFB703" />
@@ -137,7 +139,11 @@ export default function HomeScreen({
             </TouchableOpacity>
 
             {/* 5. Төлем жасау */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToPayBills}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#E8F9F6' }]}>
                 <Ionicons name="receipt-outline" size={24} color="#00B49D" />
               </View>
