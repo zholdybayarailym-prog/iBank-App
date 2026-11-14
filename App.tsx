@@ -21,7 +21,8 @@ import SettingScreen from './src/components/SettingScreen';
 import AppInfoScreen from './src/components/AppInfoScreen';
 import TransactionReportScreen from './src/components/TransactionReportScreen';
 import AccountAndCardScreen from './src/components/AccountAndCardScreen';
-import CardDetailScreen from './src/components/CardDetailScreen'; // <--- 1. Карта мәліметтері экраны импортталды
+import CardDetailScreen from './src/components/CardDetailScreen';
+import WithdrawScreen from './src/components/WithdrawScreen'; // <--- 1. Ақша шығару экраны импортталды[cite: 6]
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -105,6 +106,7 @@ export default function App() {
           onNavigateToSettings={() => setCurrentScreen('setting')}
           onNavigateToTransactionReport={() => setCurrentScreen('transactionReport')}
           onNavigateToAccountAndCard={() => setCurrentScreen('accountAndCard')}
+          onNavigateToWithdraw={() => setCurrentScreen('withdraw')} 
         />
       );
 
@@ -121,15 +123,23 @@ export default function App() {
         <AccountAndCardScreen
           userName="Зұпар Абдрахман"
           onBack={() => setCurrentScreen('home')}
-          onNavigateToCardDetail={() => setCurrentScreen('cardDetail')} 
+          onNavigateToCardDetail={() => setCurrentScreen('cardDetail')}
         />
       );
 
-    case 'cardDetail': // <--- 2. "Карта" экраны (Карта туралы толық ақпарат)
+    case 'cardDetail':
       return (
         <CardDetailScreen
           userName="Зұпар Абдрахман"
           onBack={() => setCurrentScreen('accountAndCard')}
+        />
+      );
+
+    case 'withdraw': // <--- 2. Ақша шығару (Withdraw) экранына өту логикасы[cite: 6]
+      return (
+        <WithdrawScreen
+          onBack={() => setCurrentScreen('home')}
+          onSuccess={() => setCurrentScreen('home')}
         />
       );
 
