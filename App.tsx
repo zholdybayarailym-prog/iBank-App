@@ -36,11 +36,16 @@ import SaveOnlineAddScreen from './src/components/SaveOnlineAddScreen';
 import ChooseCardScreen from './src/components/ChooseCardScreen';
 import SaveOnlineSuccessScreen from './src/components/SaveOnlineSuccessScreen';
 import SaveOnlineManagementScreen from './src/components/SaveOnlineManagementScreen';
+import AddBeneficiaryScreen from './src/components/AddBeneficiaryScreen';
+import BeneficiaryScreen from './src/components/BeneficiaryScreen';
+import BeneficiaryDetailScreen from './src/components/BeneficiaryDetailScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('Bank of America');
+  const [selectedBeneficiaryName, setSelectedBeneficiaryName] = useState('Арайлым Жолдыбай');
+const [selectedCardNumber, setSelectedCardNumber] = useState('1235 6478 990');
   
   // Чекке берілетін деректер
   const [paymentDetailData, setPaymentDetailData] = useState({
@@ -130,6 +135,44 @@ export default function App() {
           onNavigateToMobilePrepaid={() => setCurrentScreen('mobilePrepaid')}
           onNavigateToPayBills={() => setCurrentScreen('payBills')}
           onNavigateToSaveOnline={() => setCurrentScreen('saveOnline')}
+          onNavigateToBeneficiary={() => setCurrentScreen('beneficiary')}
+        />
+      );
+
+    case 'beneficiary':
+      return (
+        <BeneficiaryScreen
+          onBack={() => setCurrentScreen('home')}
+          onSearch={() => {}}
+          onAddBeneficiary={() => setCurrentScreen('addBeneficiary')}
+          onSelectBeneficiary={(name, cardNumber) => {
+            setSelectedBeneficiaryName(name);   // Атын сақтаймыз
+            setSelectedCardNumber(cardNumber); // Карта нөмірін сақтаймыз
+            setCurrentScreen('beneficiaryDetail'); // Егжей-тегжейлі экранға өтеміз
+          }}
+        />
+      );
+    
+    case 'beneficiaryDetail':
+      return (
+        <BeneficiaryDetailScreen
+          beneficiaryName={selectedBeneficiaryName} // Таңдалған алушы аты
+          cardNumber={selectedCardNumber}           // Таңдалған карта нөмірі
+          onBack={() => setCurrentScreen('beneficiary')}
+          onConfirm={() => {
+            // Растағаннан кейін басты бетке немесе сәтті аяқтау экранына өту
+            setCurrentScreen('home');
+          }}
+        />
+      );
+
+    case 'addBeneficiary':
+      return (
+        <AddBeneficiaryScreen
+          onBack={() => setCurrentScreen('beneficiary')}
+          onSave={(name, cardNumber) => {
+            setCurrentScreen('beneficiary');
+          }}
         />
       );
 
@@ -182,6 +225,22 @@ export default function App() {
       return (
         <SaveOnlineSuccessScreen
           onConfirm={() => setCurrentScreen('home')}
+        />
+      );
+      
+    case 'beneficiary':
+      return (
+        <BeneficiaryScreen
+          onBack={() => setCurrentScreen('home')}
+          onSearch={() => {
+            // Іздеу экранына өту
+          }}
+          onAddBeneficiary={() => {
+            // Жаңа алушы қосу экранына өту
+          }}
+          onSelectBeneficiary={(name, cardNumber) => {
+            // Алушыны таңдаған кезде аударым жасау экранына өту
+          }}
         />
       );
 

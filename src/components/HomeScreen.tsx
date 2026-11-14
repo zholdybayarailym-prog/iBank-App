@@ -23,7 +23,8 @@ interface HomeScreenProps {
   onNavigateToWithdraw?: () => void;
   onNavigateToMobilePrepaid?: () => void;
   onNavigateToPayBills?: () => void;
-  onNavigateToSaveOnline?: () => void; // Жаңа қосылған бағыттау
+  onNavigateToSaveOnline?: () => void;
+  onNavigateToBeneficiary?: () => void; // <-- Алушыларға бағыттау қосылды
 }
 
 export default function HomeScreen({ 
@@ -40,6 +41,7 @@ export default function HomeScreen({
   onNavigateToMobilePrepaid,
   onNavigateToPayBills,
   onNavigateToSaveOnline,
+  onNavigateToBeneficiary, // <-- Қабылданды
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -56,7 +58,7 @@ export default function HomeScreen({
               <Text style={styles.greetingText}>Сәлем, {userName}</Text>
             </View>
 
-            <TouchableOpacity style={styles.notificationButton} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.notificationButton} activeOpacity={0.8} onPress={onNavigateToMessage}>
               <Ionicons name="notifications-outline" size={22} color="#FFFFFF" />
               <View style={styles.badge} />
             </TouchableOpacity>
@@ -152,7 +154,7 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Төлем жасау</Text>
             </TouchableOpacity>
 
-            {/* 6. Жинақ (Save Online экранына бағыттау) */}
+            {/* 6. Жинақ */}
             <TouchableOpacity 
               style={styles.gridItem} 
               activeOpacity={0.7}
@@ -184,8 +186,12 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Есеп беру</Text>
             </TouchableOpacity>
 
-            {/* 9. Алушылар */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            {/* 9. Алушылар (Түзетілді: Beneficiary экранына апарады) */}
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToBeneficiary}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#FFE8EE' }]}>
                 <Ionicons name="people-outline" size={24} color="#FF4D6D" />
               </View>
