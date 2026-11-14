@@ -18,18 +18,20 @@ interface HomeScreenProps {
   onNavigateToTransfer?: () => void;
   onNavigateToMessage?: () => void;
   onNavigateToSettings?: () => void;
-  onNavigateToTransactionReport?: () => void; // <--- ЖАҢА: Есеп беруге өту функциясы
+  onNavigateToTransactionReport?: () => void;
+  onNavigateToAccountAndCard?: () => void;
 }
 
 export default function HomeScreen({ 
-  userName = 'Арайлым Жолдыбай', 
+  userName = 'Зұпар Абдрахман', 
   userBalance = '$3,469.52',
   onNavigateToSearch,
   onNavigateToExchange,
   onNavigateToTransfer,
   onNavigateToMessage,
   onNavigateToSettings,
-  onNavigateToTransactionReport, // <--- Қабылдап алу
+  onNavigateToTransactionReport,
+  onNavigateToAccountAndCard,
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -83,7 +85,11 @@ export default function HomeScreen({
           <View style={styles.gridContainer}>
             
             {/* 1. Шот пен карта */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToAccountAndCard}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#EEECFF' }]}>
                 <Ionicons name="wallet-outline" size={24} color="#5C3BFF" />
               </View>
@@ -142,7 +148,7 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Несие картасы</Text>
             </TouchableOpacity>
 
-            {/* 8. Есеп беру (Басылғанда transactionReport бетіне өтеді) */}
+            {/* 8. Есеп беру */}
             <TouchableOpacity 
               style={styles.gridItem} 
               activeOpacity={0.7}

@@ -19,7 +19,8 @@ import MessageScreen from './src/components/MessageScreen';
 import MessageDetailScreen from './src/components/MessageDetailScreen';
 import SettingScreen from './src/components/SettingScreen';
 import AppInfoScreen from './src/components/AppInfoScreen';
-import TransactionReportScreen from './src/components/TransactionReportScreen'; // <--- 1. Транзакциялар есебі импортталды
+import TransactionReportScreen from './src/components/TransactionReportScreen';
+import AccountAndCardScreen from './src/components/AccountAndCardScreen'; // <--- 1. Шот пен карта беті импортталды
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -100,13 +101,21 @@ export default function App() {
           onNavigateToTransfer={() => setCurrentScreen('transfer')}
           onNavigateToMessage={() => setCurrentScreen('message')}
           onNavigateToSettings={() => setCurrentScreen('setting')}
-          onNavigateToTransactionReport={() => setCurrentScreen('transactionReport')} // <--- 2. Басты беттен есепке өту
+          onNavigateToTransactionReport={() => setCurrentScreen('transactionReport')}
+          onNavigateToAccountAndCard={() => setCurrentScreen('accountAndCard')} // <--- 2. Басты беттен шот пен картаға өту
         />
       );
 
-    case 'transactionReport': // <--- 3. "Transaction report" экраны
+    case 'transactionReport':
       return (
         <TransactionReportScreen
+          onBack={() => setCurrentScreen('home')}
+        />
+      );
+
+    case 'accountAndCard': // <--- 3. "Шот пен карта" экраны
+      return (
+        <AccountAndCardScreen
           onBack={() => setCurrentScreen('home')}
         />
       );
