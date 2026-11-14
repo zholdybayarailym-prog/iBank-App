@@ -8,7 +8,7 @@ import {
   StatusBar,
   ScrollView,
 } from 'react-native';
-import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface TransactionReportScreenProps {
   onBack?: () => void;
@@ -62,68 +62,9 @@ export default function TransactionReportScreen({
             </View>
           </View>
 
-          {/* Баланс және график бөлігі */}
-          <View style={styles.statsCard}>
-            <Text style={styles.balanceLabel}>Баланс</Text>
-            <View style={styles.balanceRow}>
-              <Text style={styles.balanceAmount}>1000</Text>
-              <Text style={styles.currencyText}> USD</Text>
-            </View>
-
-            {/* График бағандары (Айлар қазақша) */}
-            <View style={styles.chartContainer}>
-              <View style={styles.barGroup}>
-                <View style={[styles.barColumn, { height: 70 }]}>
-                  <View style={styles.barTopBlue} />
-                  <View style={styles.barBottomPink} />
-                </View>
-                <Text style={styles.chartLabel}>Қаң</Text>
-              </View>
-
-              <View style={styles.barGroup}>
-                <View style={[styles.barColumn, { height: 95 }]}>
-                  <View style={styles.barTopBlue} />
-                  <View style={styles.barBottomPink} />
-                </View>
-                <Text style={styles.chartLabel}>Ақп</Text>
-              </View>
-
-              <View style={styles.barGroup}>
-                <View style={[styles.barColumn, { height: 130 }]}>
-                  <View style={styles.barTopBlue} />
-                  <View style={styles.barBottomPink} />
-                </View>
-                <Text style={styles.chartLabel}>Нау</Text>
-              </View>
-
-              <View style={styles.barGroup}>
-                <View style={[styles.barColumn, { height: 85 }]}>
-                  <View style={styles.barTopBlue} />
-                  <View style={styles.barBottomPink} />
-                </View>
-                <Text style={styles.chartLabel}>Сәу</Text>
-              </View>
-
-              <View style={styles.barGroup}>
-                <View style={[styles.barColumn, { height: 60 }]}>
-                  <View style={styles.barTopBlue} />
-                  <View style={styles.barBottomPink} />
-                </View>
-                <Text style={styles.chartLabel}>Мам</Text>
-              </View>
-
-              <View style={styles.barGroup}>
-                <View style={[styles.barColumn, { height: 100 }]}>
-                  <View style={styles.barTopBlue} />
-                  <View style={styles.barBottomPink} />
-                </View>
-                <Text style={styles.chartLabel}>Мау</Text>
-              </View>
-            </View>
-          </View>
-
           {/* Бүгінгі транзакциялар */}
           <Text style={styles.sectionHeader}>Бүгін</Text>
+          
           <View style={styles.transactionItem}>
             <View style={[styles.iconBox, { backgroundColor: '#3B1E88' }]}>
               <Ionicons name="water" size={20} color="#FFFFFF" />
@@ -137,6 +78,7 @@ export default function TransactionReportScreen({
 
           {/* Кешегі транзакциялар */}
           <Text style={styles.sectionHeader}>Кеше</Text>
+
           <View style={styles.transactionItem}>
             <View style={[styles.iconBox, { backgroundColor: '#FF4D6D' }]}>
               <FontAwesome5 name="wallet" size={18} color="#FFFFFF" />
@@ -145,6 +87,38 @@ export default function TransactionReportScreen({
               <Text style={styles.transactionTitle}>Кіріс: Қазан айлығы</Text>
             </View>
             <Text style={styles.amountPositive}>+$1200</Text>
+          </View>
+
+          <View style={styles.transactionItem}>
+            <View style={[styles.iconBox, { backgroundColor: '#0096FF' }]}>
+              <Ionicons name="flash" size={18} color="#FFFFFF" />
+            </View>
+            <View style={styles.transactionInfo}>
+              <Text style={styles.transactionTitle}>Электр жарығы төлемі</Text>
+              <Text style={styles.transactionSubtitle}>Сәтті өтті</Text>
+            </View>
+            <Text style={styles.amountNegative}>- $480</Text>
+          </View>
+
+          <View style={styles.transactionItem}>
+            <View style={[styles.iconBox, { backgroundColor: '#FFB703' }]}>
+              <MaterialCommunityIcons name="swap-horizontal" size={20} color="#FFFFFF" />
+            </View>
+            <View style={styles.transactionInfo}>
+              <Text style={styles.transactionTitle}>Кіріс: Жанет аударымы</Text>
+            </View>
+            <Text style={styles.amountPositive}>+$500</Text>
+          </View>
+
+          <View style={styles.transactionItem}>
+            <View style={[styles.iconBox, { backgroundColor: '#00B49D' }]}>
+              <Ionicons name="wifi" size={18} color="#FFFFFF" />
+            </View>
+            <View style={styles.transactionInfo}>
+              <Text style={styles.transactionTitle}>Интернет төлемі</Text>
+              <Text style={styles.transactionSubtitle}>Сәтті өтті</Text>
+            </View>
+            <Text style={styles.amountNegative}>- $100</Text>
           </View>
 
         </ScrollView>
@@ -190,34 +164,7 @@ const styles = StyleSheet.create({
   cardBalance: { color: '#FFFFFF', fontSize: 22, fontWeight: '700' },
   visaContainer: { justifyContent: 'center', alignItems: 'center' },
   visaText: { color: '#FFFFFF', fontSize: 22, fontWeight: '900', fontStyle: 'italic', letterSpacing: 3 },
-  statsCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 6,
-    elevation: 2,
-  },
-  balanceLabel: { fontSize: 13, color: '#A0AEC0', fontWeight: '500', marginBottom: 4 },
-  balanceRow: { flexDirection: 'row', alignItems: 'baseline', marginBottom: 20 },
-  balanceAmount: { fontSize: 26, fontWeight: '700', color: '#1A202C' },
-  currencyText: { fontSize: 14, fontWeight: '600', color: '#718096' },
-  chartContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    height: 140,
-    paddingTop: 10,
-  },
-  barGroup: { alignItems: 'center', flex: 1 },
-  barColumn: { width: 8, borderRadius: 4, overflow: 'hidden', justifyContent: 'flex-end', marginBottom: 8 },
-  barTopBlue: { flex: 1, backgroundColor: '#5C3BFF' },
-  barBottomPink: { height: 35, backgroundColor: '#FF4D6D' },
-  chartLabel: { fontSize: 12, color: '#A0AEC0', fontWeight: '500' },
-  sectionHeader: { fontSize: 15, fontWeight: '700', color: '#1A202C', marginBottom: 12, marginTop: 4 },
+  sectionHeader: { fontSize: 15, fontWeight: '700', color: '#1A202C', marginBottom: 12, marginTop: 10 },
   transactionItem: {
     flexDirection: 'row',
     alignItems: 'center',
