@@ -20,7 +20,8 @@ interface HomeScreenProps {
   onNavigateToSettings?: () => void;
   onNavigateToTransactionReport?: () => void;
   onNavigateToAccountAndCard?: () => void;
-  onNavigateToWithdraw?: () => void; // <--- Қолма-қол алу экранына өту функциясы қосылды
+  onNavigateToWithdraw?: () => void;
+  onNavigateToMobilePrepaid?: () => void; // <--- Мобильді байланысқа өту функциясы қосылды
 }
 
 export default function HomeScreen({ 
@@ -33,7 +34,8 @@ export default function HomeScreen({
   onNavigateToSettings,
   onNavigateToTransactionReport,
   onNavigateToAccountAndCard,
-  onNavigateToWithdraw, // <--- Қабылдап алу
+  onNavigateToWithdraw,
+  onNavigateToMobilePrepaid, // <--- Қабылдап алу
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -110,20 +112,24 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Ақша аудару</Text>
             </TouchableOpacity>
 
-          {/* 3. Қолма-қол алу (Withdraw) */}
-          <TouchableOpacity 
-          style={styles.gridItem} 
-          activeOpacity={0.7}
-          onPress={onNavigateToWithdraw} 
->
-  <View style={[styles.iconBox, { backgroundColor: '#E8F7FF' }]}>
-    <MaterialCommunityIcons name="atm" size={24} color="#00B4D8" />
-  </View>
-  <Text style={styles.gridText}>Қолма-қол алу</Text>
-</TouchableOpacity>
+            {/* 3. Қолма-қол алу */}
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToWithdraw}
+            >
+              <View style={[styles.iconBox, { backgroundColor: '#E8F7FF' }]}>
+                <MaterialCommunityIcons name="atm" size={24} color="#00B4D8" />
+              </View>
+              <Text style={styles.gridText}>Қолма-қол алу</Text>
+            </TouchableOpacity>
 
             {/* 4. Мобильді байланыс */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToMobilePrepaid} // <--- Мобильді байланыс экранына қосылды
+            >
               <View style={[styles.iconBox, { backgroundColor: '#FFF6E8' }]}>
                 <Ionicons name="phone-portrait-outline" size={24} color="#FFB703" />
               </View>

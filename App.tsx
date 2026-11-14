@@ -22,16 +22,17 @@ import AppInfoScreen from './src/components/AppInfoScreen';
 import TransactionReportScreen from './src/components/TransactionReportScreen';
 import AccountAndCardScreen from './src/components/AccountAndCardScreen';
 import CardDetailScreen from './src/components/CardDetailScreen';
-import WithdrawScreen from './src/components/WithdrawScreen'; // <--- 1. Ақша шығару экраны импортталды[cite: 6]
+import WithdrawScreen from './src/components/WithdrawScreen';
+import MobilePrepaidScreen from './src/components/MobilePrepaidScreen';
+import MobilePrepaidConfirmScreen from './src/components/MobilePrepaidConfirmScreen';
+import MobilePrepaidSuccessScreen from './src/components/MobilePrepaidSuccessScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
   
-  // Чатқа өтетін банктің атын сақтауға арналған state
   const [selectedBankName, setSelectedBankName] = useState('Bank of America');
   
-  // Транзакция деректерін сақтауға арналған state
   const [transferData, setTransferData] = useState({
     fromAccount: '',
     toName: '',
@@ -106,7 +107,8 @@ export default function App() {
           onNavigateToSettings={() => setCurrentScreen('setting')}
           onNavigateToTransactionReport={() => setCurrentScreen('transactionReport')}
           onNavigateToAccountAndCard={() => setCurrentScreen('accountAndCard')}
-          onNavigateToWithdraw={() => setCurrentScreen('withdraw')} 
+          onNavigateToWithdraw={() => setCurrentScreen('withdraw')}
+          onNavigateToMobilePrepaid={() => setCurrentScreen('mobilePrepaid')}
         />
       );
 
@@ -135,11 +137,34 @@ export default function App() {
         />
       );
 
-    case 'withdraw': // <--- 2. Ақша шығару (Withdraw) экранына өту логикасы[cite: 6]
+    case 'withdraw':
       return (
         <WithdrawScreen
           onBack={() => setCurrentScreen('home')}
           onSuccess={() => setCurrentScreen('home')}
+        />
+      );
+
+    case 'mobilePrepaid':
+      return (
+        <MobilePrepaidScreen
+          onBack={() => setCurrentScreen('home')}
+          onSuccess={() => setCurrentScreen('mobilePrepaidConfirm')}
+        />
+      );
+
+    case 'mobilePrepaidConfirm':
+      return (
+        <MobilePrepaidConfirmScreen
+          onBack={() => setCurrentScreen('mobilePrepaid')}
+          onSuccess={() => setCurrentScreen('mobilePrepaidSuccess')}
+        />
+      );
+
+    case 'mobilePrepaidSuccess':
+      return (
+        <MobilePrepaidSuccessScreen
+          onConfirm={() => setCurrentScreen('home')}
         />
       );
 
