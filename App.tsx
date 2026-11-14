@@ -20,7 +20,8 @@ import MessageDetailScreen from './src/components/MessageDetailScreen';
 import SettingScreen from './src/components/SettingScreen';
 import AppInfoScreen from './src/components/AppInfoScreen';
 import TransactionReportScreen from './src/components/TransactionReportScreen';
-import AccountAndCardScreen from './src/components/AccountAndCardScreen'; // <--- 1. Шот пен карта беті импортталды
+import AccountAndCardScreen from './src/components/AccountAndCardScreen';
+import CardDetailScreen from './src/components/CardDetailScreen'; // <--- 1. Карта мәліметтері экраны импортталды
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -96,27 +97,39 @@ export default function App() {
     case 'home':
       return (
         <HomeScreen
+          userName="Зұпар Абдрахман"
           onNavigateToSearch={() => setCurrentScreen('search')}
           onNavigateToExchange={() => setCurrentScreen('exchange')}
           onNavigateToTransfer={() => setCurrentScreen('transfer')}
           onNavigateToMessage={() => setCurrentScreen('message')}
           onNavigateToSettings={() => setCurrentScreen('setting')}
           onNavigateToTransactionReport={() => setCurrentScreen('transactionReport')}
-          onNavigateToAccountAndCard={() => setCurrentScreen('accountAndCard')} // <--- 2. Басты беттен шот пен картаға өту
+          onNavigateToAccountAndCard={() => setCurrentScreen('accountAndCard')}
         />
       );
 
     case 'transactionReport':
       return (
         <TransactionReportScreen
+          userName="Зұпар Абдрахман"
           onBack={() => setCurrentScreen('home')}
         />
       );
 
-    case 'accountAndCard': // <--- 3. "Шот пен карта" экраны
+    case 'accountAndCard':
       return (
         <AccountAndCardScreen
+          userName="Зұпар Абдрахман"
           onBack={() => setCurrentScreen('home')}
+          onNavigateToCardDetail={() => setCurrentScreen('cardDetail')} 
+        />
+      );
+
+    case 'cardDetail': // <--- 2. "Карта" экраны (Карта туралы толық ақпарат)
+      return (
+        <CardDetailScreen
+          userName="Зұпар Абдрахман"
+          onBack={() => setCurrentScreen('accountAndCard')}
         />
       );
 
