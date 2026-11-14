@@ -18,7 +18,8 @@ import TransferSuccessScreen from './src/components/TransferSuccessScreen';
 import MessageScreen from './src/components/MessageScreen';
 import MessageDetailScreen from './src/components/MessageDetailScreen';
 import SettingScreen from './src/components/SettingScreen';
-import AppInfoScreen from './src/components/AppInfoScreen'; // <--- 1. Жаңа "Қолданба туралы" беті импортталды
+import AppInfoScreen from './src/components/AppInfoScreen';
+import TransactionReportScreen from './src/components/TransactionReportScreen'; // <--- 1. Транзакциялар есебі импортталды
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -99,6 +100,14 @@ export default function App() {
           onNavigateToTransfer={() => setCurrentScreen('transfer')}
           onNavigateToMessage={() => setCurrentScreen('message')}
           onNavigateToSettings={() => setCurrentScreen('setting')}
+          onNavigateToTransactionReport={() => setCurrentScreen('transactionReport')} // <--- 2. Басты беттен есепке өту
+        />
+      );
+
+    case 'transactionReport': // <--- 3. "Transaction report" экраны
+      return (
+        <TransactionReportScreen
+          onBack={() => setCurrentScreen('home')}
         />
       );
 
@@ -146,11 +155,11 @@ export default function App() {
           onNavigateToSearch={() => setCurrentScreen('search')}
           onNavigateToMessage={() => setCurrentScreen('message')}
           onNavigateToLanguage={() => setCurrentScreen('language')}
-          onNavigateToAppInfo={() => setCurrentScreen('appInfo')} // <--- 2. Баптаулардан "App information" бетіне өту қосылды
+          onNavigateToAppInfo={() => setCurrentScreen('appInfo')}
         />
       );
 
-    case 'appInfo': // <--- 3. "Қолданба туралы" экраны
+    case 'appInfo':
       return (
         <AppInfoScreen
           onBack={() => setCurrentScreen('setting')}

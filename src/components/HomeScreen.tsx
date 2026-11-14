@@ -17,7 +17,8 @@ interface HomeScreenProps {
   onNavigateToExchange?: () => void;
   onNavigateToTransfer?: () => void;
   onNavigateToMessage?: () => void;
-  onNavigateToSettings?: () => void; // <--- ЖАҢА: Баптауларға өту функциясы
+  onNavigateToSettings?: () => void;
+  onNavigateToTransactionReport?: () => void; // <--- ЖАҢА: Есеп беруге өту функциясы
 }
 
 export default function HomeScreen({ 
@@ -27,7 +28,8 @@ export default function HomeScreen({
   onNavigateToExchange,
   onNavigateToTransfer,
   onNavigateToMessage,
-  onNavigateToSettings, // <--- Қабылдап алу
+  onNavigateToSettings,
+  onNavigateToTransactionReport, // <--- Қабылдап алу
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -140,8 +142,12 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Несие картасы</Text>
             </TouchableOpacity>
 
-            {/* 8. Есеп беру */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            {/* 8. Есеп беру (Басылғанда transactionReport бетіне өтеді) */}
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToTransactionReport}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#EEECFF' }]}>
                 <Ionicons name="bar-chart-outline" size={24} color="#4C26C9" />
               </View>
@@ -166,17 +172,14 @@ export default function HomeScreen({
             <Text style={styles.tabTextActive}>Басты бет</Text>
           </TouchableOpacity>
 
-          {/* Іздеу бетіне өтетін түйме */}
           <TouchableOpacity style={styles.tabItem} onPress={onNavigateToSearch}>
             <Feather name="search" size={22} color="#A0AEC0" />
           </TouchableOpacity>
 
-          {/* Хабарламалар бетіне өтетін түйме */}
           <TouchableOpacity style={styles.tabItem} onPress={onNavigateToMessage}>
             <Feather name="mail" size={22} color="#A0AEC0" />
           </TouchableOpacity>
 
-          {/* Баптаулар бетіне өтетін түйме */}
           <TouchableOpacity style={styles.tabItem} onPress={onNavigateToSettings}>
             <Feather name="settings" size={22} color="#A0AEC0" />
           </TouchableOpacity>
