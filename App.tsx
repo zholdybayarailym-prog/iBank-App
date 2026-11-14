@@ -27,13 +27,29 @@ import MobilePrepaidScreen from './src/components/MobilePrepaidScreen';
 import MobilePrepaidConfirmScreen from './src/components/MobilePrepaidConfirmScreen';
 import MobilePrepaidSuccessScreen from './src/components/MobilePrepaidSuccessScreen';
 import PayBillsScreen from './src/components/PayBillsScreen';
+import PayBillFormScreen from './src/components/PayBillFormScreen';
 import PaymentHistoryScreen from './src/components/PaymentHistoryScreen';
 import PaymentDetailScreen from './src/components/PaymentDetailScreen';
+import PaymentSuccessScreen from './src/components/PaymentSuccessScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('Bank of America');
+  
+  // Чекке берілетін деректер
+  const [paymentDetailData, setPaymentDetailData] = useState({
+    title: 'Электр төлемі',
+    name: 'Зұпар Абдрахман',
+    address: 'Шевченко, 97',
+    phone: '+77086934586',
+    code: '#2343543',
+    from: '01/10/2019',
+    to: '01/11/2019',
+    fee: '$50',
+    tax: '$10',
+    total: '$60',
+  });
   
   const [transferData, setTransferData] = useState({
     fromAccount: '',
@@ -115,9 +131,103 @@ export default function App() {
       return (
         <PayBillsScreen
           onBack={() => setCurrentScreen('home')}
-          onNavigateToMobilePrepaid={() => setCurrentScreen('mobilePrepaid')}
-          onNavigateToInternet={() => setCurrentScreen('paymentDetail')}
+          onNavigateToElectric={() => setCurrentScreen('payBillElectric')}
+          onNavigateToWater={() => setCurrentScreen('payBillWater')}
+          onNavigateToMobileBill={() => setCurrentScreen('payBillMobile')}
+          onNavigateToInternet={() => setCurrentScreen('payBillInternet')}
           onNavigateToHistory={() => setCurrentScreen('paymentHistory')}
+        />
+      );
+
+    case 'payBillElectric':
+      return (
+        <PayBillFormScreen
+          billType="electric"
+          onBack={() => setCurrentScreen('payBills')}
+          onCheck={(company, code) => {
+            setPaymentDetailData({
+              title: 'Электр төлемі',
+              name: 'Зұпар Абдрахман',
+              address: 'Шевченко, 97',
+              phone: '+77086934586',
+              code: code,
+              from: '01/10/2019',
+              to: '01/11/2019',
+              fee: '$50',
+              tax: '$10',
+              total: '$60',
+            });
+            setCurrentScreen('paymentDetail');
+          }}
+        />
+      );
+
+    case 'payBillWater':
+      return (
+        <PayBillFormScreen
+          billType="water"
+          onBack={() => setCurrentScreen('payBills')}
+          onCheck={(company, code) => {
+            setPaymentDetailData({
+              title: 'Су төлемі',
+              name: 'Зұпар Абдрахман',
+              address: 'Шевченко, 97',
+              phone: '+77086934586',
+              code: code,
+              from: '01/10/2019',
+              to: '01/11/2019',
+              fee: '$30',
+              tax: '$5',
+              total: '$35',
+            });
+            setCurrentScreen('paymentDetail');
+          }}
+        />
+      );
+
+    case 'payBillMobile':
+      return (
+        <PayBillFormScreen
+          billType="mobile"
+          onBack={() => setCurrentScreen('payBills')}
+          onCheck={(company, code) => {
+            setPaymentDetailData({
+              title: 'Мобильді төлем',
+              name: 'Зұпар Абдрахман',
+              address: 'Шевченко, 97',
+              phone: '+77086934586',
+              code: code,
+              from: '01/10/2019',
+              to: '01/11/2019',
+              fee: '$20',
+              tax: '$3',
+              total: '$23',
+            });
+            setCurrentScreen('paymentDetail');
+          }}
+        />
+      );
+
+    case 'payBillInternet':
+      return (
+        <PayBillFormScreen
+          billType="internet"
+          onBack={() => setCurrentScreen('payBills')}
+          onCheck={(company, code) => {
+            setPaymentDetailData({
+              title: `${company} төлемі`,
+              name: 'Зұпар Абдрахман',
+              address: 'Шевченко, 97',
+              phone: '+77086934586',
+              code: code,
+              from: '01/10/2019',
+              to: '01/11/2019',
+              fee: '$45',
+              tax: '$8',
+              total: '$53',
+            });
+            setCurrentScreen('paymentDetail');
+          }}
         />
       );
 
@@ -125,13 +235,38 @@ export default function App() {
       return (
         <PaymentHistoryScreen
           onBack={() => setCurrentScreen('payBills')}
+          onItemPress={() => {
+            setPaymentDetailData({
+              title: 'Төлем чегі',
+              name: 'Зұпар Абдрахман',
+              address: 'Шевченко, 97',
+              phone: '+77086934586',
+              code: '#2343543',
+              from: '01/10/2019',
+              to: '01/11/2019',
+              fee: '$50',
+              tax: '$10',
+              total: '$60',
+            });
+            setCurrentScreen('paymentDetail');
+          }}
         />
       );
 
     case 'paymentDetail':
       return (
         <PaymentDetailScreen
+          paymentData={paymentDetailData}
           onBack={() => setCurrentScreen('payBills')}
+          onPaymentSuccess={() => setCurrentScreen('paymentSuccess')}
+        />
+      );
+
+    case 'paymentSuccess':
+      return (
+        <PaymentSuccessScreen
+          title={paymentDetailData.title}
+          onConfirm={() => setCurrentScreen('home')}
         />
       );
 
@@ -226,7 +361,7 @@ export default function App() {
           onBack={() => setCurrentScreen('message')}
         />
       );
-
+      
     case 'setting':
       return (
         <SettingScreen

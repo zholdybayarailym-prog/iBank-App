@@ -12,14 +12,19 @@ import { Ionicons, Feather } from '@expo/vector-icons';
 
 interface PayBillsScreenProps {
   onBack?: () => void;
-  onNavigateToMobilePrepaid?: () => void;
-  onNavigateToInternet?: () => void; // <--- Қате шықпас үшін қосылған функция
+  onNavigateToMobilePrepaid?: () => void; // Басты беттегідей толтырып төлейтін бет үшін қала береді (егер керек болса)
+  onNavigateToElectric?: () => void;
+  onNavigateToWater?: () => void;
+  onNavigateToMobileBill?: () => void;
+  onNavigateToInternet?: () => void;
   onNavigateToHistory?: () => void;
 }
 
 export default function PayBillsScreen({
   onBack,
-  onNavigateToMobilePrepaid,
+  onNavigateToElectric,
+  onNavigateToWater,
+  onNavigateToMobileBill,
   onNavigateToInternet,
   onNavigateToHistory,
 }: PayBillsScreenProps) {
@@ -35,7 +40,7 @@ export default function PayBillsScreen({
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Төлем жасау</Text>
 
-          {/* Төлемдер тарихына өтетін сағат белгішесі */}
+          {/* Төлемдер тарихына өтетін батырма */}
           <TouchableOpacity style={styles.historyButton} onPress={onNavigateToHistory} activeOpacity={0.7}>
             <Ionicons name="time-outline" size={22} color="#5C3BFF" />
           </TouchableOpacity>
@@ -44,8 +49,8 @@ export default function PayBillsScreen({
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         
-        {/* 1. Электр энергиясы */}
-        <TouchableOpacity style={styles.billCard} activeOpacity={0.8}>
+        {/* 1. Электр энергиясы (Чекке өтеді) */}
+        <TouchableOpacity style={styles.billCard} activeOpacity={0.8} onPress={onNavigateToElectric}>
           <View style={styles.billInfo}>
             <Text style={styles.billTitle}>Электр энергиясы</Text>
             <Text style={styles.billSubtitle}>Осы айдағы электр төлемі</Text>
@@ -55,8 +60,8 @@ export default function PayBillsScreen({
           </View>
         </TouchableOpacity>
 
-        {/* 2. Су төлемі */}
-        <TouchableOpacity style={styles.billCard} activeOpacity={0.8}>
+        {/* 2. Су төлемі (Чекке өтеді) */}
+        <TouchableOpacity style={styles.billCard} activeOpacity={0.8} onPress={onNavigateToWater}>
           <View style={styles.billInfo}>
             <Text style={styles.billTitle}>Су төлемі</Text>
             <Text style={styles.billSubtitle}>Осы айдағы су төлемі</Text>
@@ -66,11 +71,11 @@ export default function PayBillsScreen({
           </View>
         </TouchableOpacity>
 
-        {/* 3. Мобильді байланыс */}
+        {/* 3. Мобильді байланыс (Чекке өтеді) */}
         <TouchableOpacity 
           style={styles.billCard} 
           activeOpacity={0.8}
-          onPress={onNavigateToMobilePrepaid}
+          onPress={onNavigateToMobileBill}
         >
           <View style={styles.billInfo}>
             <Text style={styles.billTitle}>Мобильді байланыс</Text>
@@ -81,11 +86,11 @@ export default function PayBillsScreen({
           </View>
         </TouchableOpacity>
 
-        {/* 4. Интернет */}
+        {/* 4. Интернет төлемі (Чекке өтеді) */}
         <TouchableOpacity 
           style={styles.billCard} 
           activeOpacity={0.8}
-          onPress={onNavigateToInternet} // <--- Интернет чегіне немесе төлеміне бағыттау
+          onPress={onNavigateToInternet}
         >
           <View style={styles.billInfo}>
             <Text style={styles.billTitle}>Интернет төлемі</Text>
@@ -121,13 +126,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   scrollContent: { 
     paddingHorizontal: 20, 
     paddingTop: 20, 
     paddingBottom: 40 
   },
-
   billCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 20,

@@ -12,39 +12,32 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface PaymentHistoryScreenProps {
   onBack?: () => void;
+  onItemPress?: () => void;
 }
 
 export default function PaymentHistoryScreen({
   onBack,
+  onItemPress,
 }: PaymentHistoryScreenProps) {
-  // Санаттар: 'electric', 'water', 'mobile', 'internet'
-  const [activeCategory, setActiveCategory] = useState('electric');
+  const [activeCategory, setActiveCategory] = useState('internet');
 
-  // Барлық санаттардың тарихы (Интернет төлемі де қосылды)
-  const allHistoryData: { [key: string]: Array<{ month: string; date: string; status: string; isSuccess: boolean; amount: string }> } = {
+  const allHistoryData: { [key: string]: Array<{ month: string; date: string; status: string; isSuccess: boolean; amount: string; company: string }> } = {
     electric: [
-      { month: 'Қазан', date: '30/10/2019', status: 'Сәтсіз', isSuccess: false, amount: '$480' },
-      { month: 'Қыркүйек', date: '30/09/2019', status: 'Сәтті', isSuccess: true, amount: '$450' },
-      { month: 'Тамыз', date: '30/08/2019', status: 'Сәтті', isSuccess: true, amount: '$520' },
-      { month: 'Шілде', date: '30/07/2019', status: 'Сәтті', isSuccess: true, amount: '$490' },
+      { month: 'October', date: '30/10/2019', status: 'Unsuccessfully', isSuccess: false, amount: '$50', company: 'Capi Telecom' },
+      { month: 'September', date: '30/10/2019', status: 'Successfully', isSuccess: true, amount: '$50', company: 'Capi Telecom' },
     ],
     water: [
-      { month: 'Қазан', date: '28/10/2019', status: 'Сәтті', isSuccess: true, amount: '$120' },
-      { month: 'Қыркүйек', date: '27/09/2019', status: 'Сәтті', isSuccess: true, amount: '$115' },
-      { month: 'Тамыз', date: '25/08/2019', status: 'Сәтсіз', isSuccess: false, amount: '$130' },
-      { month: 'Шілде', date: '29/07/2019', status: 'Сәтті', isSuccess: true, amount: '$110' },
+      { month: 'October', date: '28/10/2019', status: 'Successfully', isSuccess: true, amount: '$30', company: 'Water Service' },
     ],
     mobile: [
-      { month: 'Қазан', date: '01/10/2019', status: 'Сәтті', isSuccess: true, amount: '$45' },
-      { month: 'Қыркүйек', date: '01/09/2019', status: 'Сәтті', isSuccess: true, amount: '$45' },
-      { month: 'Тамыз', date: '01/08/2019', status: 'Сәтті', isSuccess: true, amount: '$50' },
-      { month: 'Шілде', date: '01/07/2019', status: 'Сәтсіз', isSuccess: false, amount: '$45' },
+      { month: 'October', date: '01/10/2019', status: 'Successfully', isSuccess: true, amount: '$20', company: 'Tele2' },
     ],
     internet: [
-      { month: 'Қазан', date: '05/10/2019', status: 'Сәтті', isSuccess: true, amount: '$85' },
-      { month: 'Қыркүйек', date: '05/09/2019', status: 'Сәтті', isSuccess: true, amount: '$85' },
-      { month: 'Тамыз', date: '05/08/2019', status: 'Сәтсіз', isSuccess: false, amount: '$85' },
-      { month: 'Шілде', date: '05/07/2019', status: 'Сәтті', isSuccess: true, amount: '$80' },
+      { month: 'October', date: '30/10/2019', status: 'Unsuccessfully', isSuccess: false, amount: '$50', company: 'Capi Telecom' },
+      { month: 'September', date: '30/10/2019', status: 'Successfully', isSuccess: true, amount: '$50', company: 'Capi Telecom' },
+      { month: 'August', date: '30/10/2019', status: 'Successfully', isSuccess: true, amount: '$50', company: 'Capi Telecom' },
+      { month: 'July', date: '30/10/2019', status: 'Successfully', isSuccess: true, amount: '$50', company: 'Capi Telecom' },
+      { month: 'June', date: '30/10/2019', status: 'Successfully', isSuccess: true, amount: '$50', company: 'Capi Telecom' },
     ],
   };
 
@@ -60,74 +53,64 @@ export default function PaymentHistoryScreen({
           <TouchableOpacity style={styles.backButton} onPress={onBack}>
             <Ionicons name="chevron-back" size={24} color="#1A202C" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Төлемдер тарихы</Text>
+          <Text style={styles.headerTitle}>Payment history</Text>
         </View>
       </SafeAreaView>
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         
-        {/* Санаттарды таңдау батырмалары */}
+        {/* Санаттар */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesRow}>
-          <TouchableOpacity
-            style={[styles.categoryTab, activeCategory === 'electric' && styles.activeCategoryTab]}
-            onPress={() => setActiveCategory('electric')}
-          >
-            <Text style={[styles.categoryText, activeCategory === 'electric' && styles.activeCategoryText]}>
-              Электр
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.categoryTab, activeCategory === 'water' && styles.activeCategoryTab]}
-            onPress={() => setActiveCategory('water')}
-          >
-            <Text style={[styles.categoryText, activeCategory === 'water' && styles.activeCategoryText]}>
-              Су
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.categoryTab, activeCategory === 'mobile' && styles.activeCategoryTab]}
-            onPress={() => setActiveCategory('mobile')}
-          >
-            <Text style={[styles.categoryText, activeCategory === 'mobile' && styles.activeCategoryText]}>
-              Мобильді
-            </Text>
-          </TouchableOpacity>
-
-          {/* Интернет санаты қосылды */}
-          <TouchableOpacity
-            style={[styles.categoryTab, activeCategory === 'internet' && styles.activeCategoryTab]}
-            onPress={() => setActiveCategory('internet')}
-          >
-            <Text style={[styles.categoryText, activeCategory === 'internet' && styles.activeCategoryText]}>
-              Интернет
-            </Text>
-          </TouchableOpacity>
+          {['Water', 'Mobile', 'Internet', 'Electric'].map((cat) => {
+            const key = cat.toLowerCase();
+            const isActive = activeCategory === key;
+            return (
+              <TouchableOpacity
+                key={cat}
+                style={[styles.categoryTab, isActive && styles.activeCategoryTab]}
+                onPress={() => setActiveCategory(key)}
+              >
+                <Text style={[styles.categoryText, isActive && styles.activeCategoryText]}>
+                  {cat}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
 
         {/* Төлемдер тізімі */}
         {currentData.map((item, index) => (
-          <View key={index} style={styles.historyCard}>
+          <TouchableOpacity 
+            key={index} 
+            style={styles.historyCard} 
+            activeOpacity={0.8}
+            onPress={onItemPress}
+          >
             <View style={styles.cardRow}>
               <Text style={styles.monthText}>{item.month}</Text>
               <Text style={styles.dateText}>{item.date}</Text>
             </View>
 
             <View style={styles.cardRowBottom}>
-              <View style={styles.statusContainer}>
-                <Text style={styles.statusLabel}>Статус: </Text>
-                <Text style={[styles.statusValue, item.isSuccess ? styles.successText : styles.errorText]}>
-                  {item.status}
-                </Text>
+              <View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoLabel}>Status</Text>
+                  <Text style={[styles.statusValue, item.isSuccess ? styles.successText : styles.errorText]}>
+                    {item.status}
+                  </Text>
+                </View>
+                <View style={[styles.infoRow, { marginTop: 6 }]}>
+                  <Text style={styles.infoLabel}>Company</Text>
+                  <Text style={styles.companyValue}>{item.company}</Text>
+                </View>
               </View>
 
-              <View style={styles.amountContainer}>
-                <Text style={styles.amountLabel}>Сомасы: </Text>
+              <View style={styles.amountBox}>
+                <Text style={styles.amountLabel}>Amount</Text>
                 <Text style={styles.amountValue}>{item.amount}</Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         ))}
 
       </ScrollView>
@@ -146,17 +129,8 @@ const styles = StyleSheet.create({
   },
   backButton: { marginRight: 15, padding: 4 },
   headerTitle: { color: '#1A202C', fontSize: 18, fontWeight: '700' },
-
-  scrollContent: { 
-    paddingHorizontal: 20, 
-    paddingTop: 20, 
-    paddingBottom: 40 
-  },
-
-  categoriesRow: {
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
+  scrollContent: { paddingHorizontal: 20, paddingTop: 20, paddingBottom: 40 },
+  categoriesRow: { flexDirection: 'row', marginBottom: 20 },
   categoryTab: {
     paddingVertical: 10,
     paddingHorizontal: 24,
@@ -167,18 +141,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  activeCategoryTab: {
-    backgroundColor: '#5C3BFF',
-  },
-  categoryText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#718096',
-  },
-  activeCategoryText: {
-    color: '#FFFFFF',
-  },
-
+  activeCategoryTab: { backgroundColor: '#5C3BFF' },
+  categoryText: { fontSize: 14, fontWeight: '600', color: '#718096' },
+  activeCategoryText: { color: '#FFFFFF' },
   historyCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
@@ -196,50 +161,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  monthText: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1A202C',
-  },
-  dateText: {
-    fontSize: 13,
-    color: '#A0AEC0',
-    fontWeight: '500',
-  },
+  monthText: { fontSize: 16, fontWeight: '700', color: '#1A202C' },
+  dateText: { fontSize: 13, color: '#A0AEC0', fontWeight: '500' },
   cardRowBottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
   },
-  statusContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statusLabel: {
-    fontSize: 13,
-    color: '#718096',
-  },
-  statusValue: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  successText: {
-    color: '#22C55E',
-  },
-  errorText: {
-    color: '#EF4444',
-  },
-  amountContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  amountLabel: {
-    fontSize: 13,
-    color: '#718096',
-  },
-  amountValue: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#5C3BFF',
-  },
+  infoRow: { flexDirection: 'row', alignItems: 'center' },
+  infoLabel: { fontSize: 13, color: '#718096', width: 65 },
+  statusValue: { fontSize: 13, fontWeight: '600' },
+  successText: { color: '#22C55E' },
+  errorText: { color: '#EF4444' },
+  companyValue: { fontSize: 13, fontWeight: '600', color: '#1A202C' },
+  amountBox: { alignItems: 'flex-end' },
+  amountLabel: { fontSize: 12, color: '#718096', marginBottom: 2 },
+  amountValue: { fontSize: 16, fontWeight: '700', color: '#5C3BFF' },
 });
