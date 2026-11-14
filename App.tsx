@@ -31,6 +31,11 @@ import PayBillFormScreen from './src/components/PayBillFormScreen';
 import PaymentHistoryScreen from './src/components/PaymentHistoryScreen';
 import PaymentDetailScreen from './src/components/PaymentDetailScreen';
 import PaymentSuccessScreen from './src/components/PaymentSuccessScreen';
+import SaveOnlineScreen from './src/components/SaveOnlineScreen';
+import SaveOnlineAddScreen from './src/components/SaveOnlineAddScreen';
+import ChooseCardScreen from './src/components/ChooseCardScreen';
+import SaveOnlineSuccessScreen from './src/components/SaveOnlineSuccessScreen';
+import SaveOnlineManagementScreen from './src/components/SaveOnlineManagementScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
@@ -124,6 +129,59 @@ export default function App() {
           onNavigateToWithdraw={() => setCurrentScreen('withdraw')}
           onNavigateToMobilePrepaid={() => setCurrentScreen('mobilePrepaid')}
           onNavigateToPayBills={() => setCurrentScreen('payBills')}
+          onNavigateToSaveOnline={() => setCurrentScreen('saveOnline')}
+        />
+      );
+
+    case 'saveOnline':
+      return (
+        <SaveOnlineScreen
+          onBack={() => setCurrentScreen('home')}
+          onNavigateToAdd={() => setCurrentScreen('chooseCard')}
+          onNavigateToManagement={() => setCurrentScreen('saveOnlineManagement')}
+        />
+      );
+
+    case 'saveOnlineManagement':
+      return (
+        <SaveOnlineManagementScreen
+          onBack={() => setCurrentScreen('saveOnline')}
+          onSelectAccount={(accountNumber) => {
+            // Шотты басқан кездегі қосымша әрекеттер (қажет болса)
+          }}
+        />
+      );
+
+    case 'chooseCard':
+      return (
+        <ChooseCardScreen
+          userName="Зұпар Абдрахман"
+          onBack={() => setCurrentScreen('saveOnline')} // Кері қайтқанда жинақ мәзіріне барады
+          onSelectCard={(cardName) => {
+            // Картаны таңдаған соң депозит қосу формасына өту
+            setCurrentScreen('saveOnlineAdd');
+          }}
+          onAddCard={() => {
+            // Жаңа карта қосу экранына өту
+          }}
+        />
+      );
+
+    case 'saveOnlineAdd':
+      return (
+        <SaveOnlineAddScreen
+          onBack={() => setCurrentScreen('saveOnline')}
+          onVerify={(account, term, amount) => {
+            // Тексеруден өткен соң сәтті аяқталу экранына өту
+            setCurrentScreen('saveOnlineSuccess');
+          }}
+        />
+      );
+
+    case 'saveOnlineSuccess':
+      return (
+        <SaveOnlineSuccessScreen
+          onConfirm={() => setCurrentScreen('home')}
         />
       );
 

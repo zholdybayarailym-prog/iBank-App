@@ -23,6 +23,7 @@ interface HomeScreenProps {
   onNavigateToWithdraw?: () => void;
   onNavigateToMobilePrepaid?: () => void;
   onNavigateToPayBills?: () => void;
+  onNavigateToSaveOnline?: () => void; // Жаңа қосылған бағыттау
 }
 
 export default function HomeScreen({ 
@@ -38,6 +39,7 @@ export default function HomeScreen({
   onNavigateToWithdraw,
   onNavigateToMobilePrepaid,
   onNavigateToPayBills,
+  onNavigateToSaveOnline,
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -150,8 +152,12 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Төлем жасау</Text>
             </TouchableOpacity>
 
-            {/* 6. Жинақ */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            {/* 6. Жинақ (Save Online экранына бағыттау) */}
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToSaveOnline}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#EEECFF' }]}>
                 <MaterialCommunityIcons name="piggy-bank-outline" size={24} color="#5C3BFF" />
               </View>
