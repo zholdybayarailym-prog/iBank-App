@@ -24,7 +24,8 @@ interface HomeScreenProps {
   onNavigateToMobilePrepaid?: () => void;
   onNavigateToPayBills?: () => void;
   onNavigateToSaveOnline?: () => void;
-  onNavigateToBeneficiary?: () => void; // <-- Алушыларға бағыттау қосылды
+  onNavigateToBeneficiary?: () => void;
+  onNavigateToCreditCard?: () => void; // <-- Несие картасына бағыттау қосылды
 }
 
 export default function HomeScreen({ 
@@ -41,7 +42,8 @@ export default function HomeScreen({
   onNavigateToMobilePrepaid,
   onNavigateToPayBills,
   onNavigateToSaveOnline,
-  onNavigateToBeneficiary, // <-- Қабылданды
+  onNavigateToBeneficiary,
+  onNavigateToCreditCard, // <-- Қабылданды
 }: HomeScreenProps) {
   return (
     <View style={styles.container}>
@@ -70,8 +72,12 @@ export default function HomeScreen({
       <View style={styles.mainContainer}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
           
-         {/* Банк картасы */}
-          <View style={styles.cardContainer}>
+         {/* Банк картасы (Басқан кезде CreditCardScreen-ге өтеді) */}
+          <TouchableOpacity 
+            style={styles.cardContainer} 
+            activeOpacity={0.9}
+            onPress={onNavigateToCreditCard}
+          >
             <View style={styles.cardDesign}>
               <View style={styles.cardTopRow}>
                 <Text style={styles.cardHolderName}>{userName}</Text>
@@ -89,7 +95,7 @@ export default function HomeScreen({
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
 
           {/* Қызметтер торы (Grid Menu) */}
           <View style={styles.gridContainer}>
@@ -167,7 +173,11 @@ export default function HomeScreen({
             </TouchableOpacity>
 
             {/* 7. Несие картасы */}
-            <TouchableOpacity style={styles.gridItem} activeOpacity={0.7}>
+            <TouchableOpacity 
+              style={styles.gridItem} 
+              activeOpacity={0.7}
+              onPress={onNavigateToCreditCard}
+            >
               <View style={[styles.iconBox, { backgroundColor: '#FFF2E8' }]}>
                 <Ionicons name="card-outline" size={24} color="#F77F00" />
               </View>
@@ -186,7 +196,7 @@ export default function HomeScreen({
               <Text style={styles.gridText}>Есеп беру</Text>
             </TouchableOpacity>
 
-            {/* 9. Алушылар (Түзетілді: Beneficiary экранына апарады) */}
+            {/* 9. Алушылар */}
             <TouchableOpacity 
               style={styles.gridItem} 
               activeOpacity={0.7}

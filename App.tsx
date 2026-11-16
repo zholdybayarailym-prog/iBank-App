@@ -39,13 +39,16 @@ import SaveOnlineManagementScreen from './src/components/SaveOnlineManagementScr
 import AddBeneficiaryScreen from './src/components/AddBeneficiaryScreen';
 import BeneficiaryScreen from './src/components/BeneficiaryScreen';
 import BeneficiaryDetailScreen from './src/components/BeneficiaryDetailScreen';
+import CreditCardScreen from './src/components/CreditCardScreen';
+import CreditCardPayScreen from './src/components/CreditCardPayScreen';
+import TransactionSuccessScreen from './src/components/TransactionSuccessScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<string>('signin');
   const [userPhone, setUserPhone] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('Bank of America');
   const [selectedBeneficiaryName, setSelectedBeneficiaryName] = useState('Арайлым Жолдыбай');
-const [selectedCardNumber, setSelectedCardNumber] = useState('1235 6478 990');
+  const [selectedCardNumber, setSelectedCardNumber] = useState('1235 6478 990');
   
   // Чекке берілетін деректер
   const [paymentDetailData, setPaymentDetailData] = useState({
@@ -136,6 +139,30 @@ const [selectedCardNumber, setSelectedCardNumber] = useState('1235 6478 990');
           onNavigateToPayBills={() => setCurrentScreen('payBills')}
           onNavigateToSaveOnline={() => setCurrentScreen('saveOnline')}
           onNavigateToBeneficiary={() => setCurrentScreen('beneficiary')}
+          onNavigateToCreditCard={() => setCurrentScreen('creditCard')}
+        />
+      );
+
+    case 'creditCard':
+      return (
+        <CreditCardScreen
+          onBack={() => setCurrentScreen('home')}
+          onPay={() => setCurrentScreen('creditCardPay')}
+        />
+      );
+
+    case 'creditCardPay':
+      return (
+        <CreditCardPayScreen
+          onBack={() => setCurrentScreen('creditCard')}
+          onSuccess={() => setCurrentScreen('transactionSuccess')}
+        />
+      );
+
+    case 'transactionSuccess':
+      return (
+        <TransactionSuccessScreen
+          onConfirm={() => setCurrentScreen('home')}
         />
       );
 
