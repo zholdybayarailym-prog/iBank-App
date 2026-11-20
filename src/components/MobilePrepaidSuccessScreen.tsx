@@ -6,165 +6,224 @@ import {
   TouchableOpacity,
   SafeAreaView,
   StatusBar,
-  ScrollView,
 } from 'react-native';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 interface MobilePrepaidSuccessScreenProps {
+  phoneNumber?: string;
+  amount?: string;
+  operator?: string;
   onConfirm?: () => void;
+  onNavigateHome?: () => void;
 }
 
 export default function MobilePrepaidSuccessScreen({
+  phoneNumber = '+7 (707) 459-97-21',
+  amount = '$15.00',
+  operator = 'Activ / Kcell',
   onConfirm,
+  onNavigateHome,
 }: MobilePrepaidSuccessScreenProps) {
+  const handleDone = () => {
+    if (onConfirm) {
+      onConfirm();
+    } else if (onNavigateHome) {
+      onNavigateHome();
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
 
-      {/* Жоғарғы панель */}
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTime}>9:09</Text>
-          <View style={styles.headerIcons}>
-            <Ionicons name="cellular" size={16} color="#1A202C" style={styles.iconSpacing} />
-            <Ionicons name="wifi" size={16} color="#1A202C" style={styles.iconSpacing} />
-            <Ionicons name="battery-full" size={20} color="#1A202C" />
-          </View>
-        </View>
-      </SafeAreaView>
-
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-        
-        {/* Иллюстрация блогы */}
-        <View style={styles.illustrationContainer}>
-          <View style={styles.cardIllustration}>
-            <MaterialCommunityIcons name="credit-card-outline" size={80} color="#5C3BFF" />
-            <View style={styles.shieldBadge}>
-              <Ionicons name="checkmark" size={16} color="#FFFFFF" />
+      <View style={styles.content}>
+        {/* Жоғарғы сәттілік иллюстрациясы */}
+        <View style={styles.illustrationWrapper}>
+          <View style={styles.outerCircle}>
+            <View style={styles.innerCircle}>
+              <Ionicons name="phone-portrait-outline" size={44} color="#3B1E88" />
             </View>
           </View>
-          <View style={styles.coinsRow}>
-            <MaterialCommunityIcons name="cash" size={32} color="#F6AD55" />
-            <MaterialCommunityIcons name="cash" size={38} color="#ED8936" />
-            <MaterialCommunityIcons name="cash" size={44} color="#DD6B20" />
+
+          <View style={styles.checkBadge}>
+            <Ionicons name="checkmark" size={20} color="#FFFFFF" />
+          </View>
+
+          <View style={styles.sparkleBadge}>
+            <Ionicons name="wifi" size={18} color="#4C26C9" />
           </View>
         </View>
 
-        {/* Мәтіндік хабарлама */}
-        <Text style={styles.successTitle}>Төлем сәтті өтті!</Text>
-        <Text style={styles.successSubtitle}>
-          Сіз мобильді байланыс үшін төлемді сәтті жасадыңыз!
+        {/* Тақырып және сипаттама */}
+        <Text style={styles.title}>Төлем сәтті орындалды!</Text>
+        <Text style={styles.subtitle}>
+          Ұялы байланыс теңгерімі сәтті толтырылды.
         </Text>
 
-        {/* Растау түймесі */}
+        {/* Қысқаша түбіртек карточкасы */}
+        <View style={styles.summaryCard}>
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Оператор</Text>
+            <Text style={styles.summaryValue}>{operator}</Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Телефон нөмірі</Text>
+            <Text style={styles.summaryValue}>{phoneNumber}</Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Төленген сома</Text>
+            <Text style={styles.amountValue}>{amount}</Text>
+          </View>
+        </View>
+
+        {/* Растау батырмасы */}
         <TouchableOpacity
           style={styles.confirmButton}
-          activeOpacity={0.8}
-          onPress={onConfirm}
+          activeOpacity={0.85}
+          onPress={handleDone}
         >
           <Text style={styles.confirmButtonText}>Растау</Text>
         </TouchableOpacity>
-
-      </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFFFFF' },
-  safeArea: { backgroundColor: '#FFFFFF' },
-  headerContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
   },
-  headerTime: { fontSize: 15, fontWeight: '600', color: '#1A202C' },
-  headerIcons: { flexDirection: 'row', alignItems: 'center' },
-  iconSpacing: { marginRight: 6 },
-
-  scrollContent: { 
-    paddingHorizontal: 24, 
-    paddingTop: 40, 
-    paddingBottom: 40,
+  content: {
+    flex: 1,
     alignItems: 'center',
-  },
-
-  illustrationContainer: {
-    width: '100%',
-    height: 220,
     justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  illustrationWrapper: {
+    width: 140,
+    height: 140,
     alignItems: 'center',
-    marginBottom: 30,
-    backgroundColor: '#F8FAFC',
-    borderRadius: 24,
+    justifyContent: 'center',
+    marginBottom: 28,
     position: 'relative',
   },
-  cardIllustration: {
-    width: 140,
-    height: 90,
-    backgroundColor: '#EEF2FF',
-    borderRadius: 16,
-    justifyContent: 'center',
+  outerCircle: {
+    width: 124,
+    height: 124,
+    borderRadius: 62,
+    backgroundColor: '#F3F0FF',
     alignItems: 'center',
-    shadowColor: '#5C3BFF',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
-    elevation: 4,
+    justifyContent: 'center',
   },
-  shieldBadge: {
-    position: 'absolute',
-    bottom: -10,
-    backgroundColor: '#5C3BFF',
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: 'center',
+  innerCircle: {
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: '#E5DEFF',
     alignItems: 'center',
-    borderWidth: 2,
+    justifyContent: 'center',
+  },
+  checkBadge: {
+    position: 'absolute',
+    bottom: 10,
+    right: 12,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#10B981',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
     borderColor: '#FFFFFF',
   },
-  coinsRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+  sparkleBadge: {
     position: 'absolute',
-    right: 40,
-    bottom: 30,
+    top: 12,
+    left: 12,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 3,
   },
-
-  successTitle: {
+  title: {
     fontSize: 22,
     fontWeight: '700',
-    color: '#1A202C',
-    marginBottom: 10,
+    color: '#3B1E88',
     textAlign: 'center',
+    marginBottom: 8,
   },
-  successSubtitle: {
+  subtitle: {
     fontSize: 14,
     color: '#718096',
     textAlign: 'center',
-    marginBottom: 40,
-    paddingHorizontal: 20,
+    marginBottom: 28,
+    lineHeight: 20,
   },
-
+  summaryCard: {
+    width: '100%',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 18,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    marginBottom: 32,
+    borderWidth: 1,
+    borderColor: '#EDF2F7',
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  summaryLabel: {
+    fontSize: 13,
+    color: '#718096',
+    fontWeight: '500',
+  },
+  summaryValue: {
+    fontSize: 14,
+    color: '#1A202C',
+    fontWeight: '600',
+  },
+  amountValue: {
+    fontSize: 16,
+    color: '#3B1E88',
+    fontWeight: '800',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#E2E8F0',
+  },
   confirmButton: {
     width: '100%',
-    backgroundColor: '#5C3BFF',
-    height: 52,
+    height: 54,
+    backgroundColor: '#3B1E88',
     borderRadius: 16,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#5C3BFF',
+    shadowColor: '#3B1E88',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
-    elevation: 3,
+    elevation: 4,
   },
-  confirmButtonText: { 
-    color: '#FFFFFF', 
-    fontSize: 16, 
-    fontWeight: '700' 
+  confirmButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
 });
